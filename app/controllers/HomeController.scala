@@ -3,7 +3,8 @@ package controllers
 import javax.inject._
 import play.api._
 import play.api.mvc._
-
+import java.lang.ProcessBuilder.Redirect
+import de.htwg.se.mastermind.controller.ControllerComponent.ControllerBaseImpl._
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -11,6 +12,7 @@ import play.api.mvc._
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
+  var controller = new Controller()
   /**
    * Create an Action to render an HTML page.
    *
