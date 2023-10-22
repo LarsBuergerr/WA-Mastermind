@@ -27,4 +27,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def displayGame() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.displayGame(controller.game.toString(), ""))
   }
+
+  def about() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.about())
+  }
 }
