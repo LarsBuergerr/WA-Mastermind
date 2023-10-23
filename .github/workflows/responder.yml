@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'
       - name: pull_repo
         if: github.event.action == 'ping'
-        run: git clone https://github.com/LarsBuergerr/mastermind.git
+        run: git clone https://github.com/LarsBuergerr/mastermind.git -b 15-WA-Integration
       - name: goto_mastermind
         if: github.event.action == 'ping'      
         run: |
