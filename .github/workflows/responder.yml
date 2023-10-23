@@ -40,14 +40,13 @@ jobs:
           rm -rf lib
           mkdir -p lib 
           cp mastermind/target/scala-3.1.2/*.jar lib/  
-          rm -rf uno
+          rm -rf mastermind
       - name: commit_files
         if: github.event.action == 'ping'
         run: |
           ls
           git config --local user.email "92576797+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git fetch
           git add --all 
           git commit -m "Add changes" -a
       - name: Push changes
