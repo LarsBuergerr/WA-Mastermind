@@ -1,0 +1,8 @@
+@(game_str: String, error: String)
+
+@main("Mastermind"){
+    <h3 class="center" id="demo">@for(txt <- game_str.split("\n")) {
+        @txt <br>
+    }
+        <br>@error</h3>
+    }
