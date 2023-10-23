@@ -5,6 +5,7 @@ import play.api._
 import play.api.mvc._
 import java.lang.ProcessBuilder.Redirect
 import de.htwg.se.mastermind.controller.ControllerComponent.ControllerBaseImpl._
+import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.{Stone, HStone, HintStone}
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -25,6 +26,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.displayGame(controller.game.toString(), ""))
+  }
+
+  def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
+    val chars = stones.toCharArray()
+    val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
+    val hints = controller.game.getCode().compareTo(stoneVector)
+
+    controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
     Ok(views.html.displayGame(controller.game.toString(), ""))
   }
 

@@ -6,7 +6,7 @@
   <div class="header-container">
     <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="276" width="873"/>
     <div class="button-container">
-      <button class="my-button-class">New Game</button>
+      <button class="my-button-class" onclick="loadDisplayGamePage()">New Game</button>
       <button class="my-button-class" onclick="loadAboutPage()">About</button>
       <button class="my-button-class" onclick="loadHelpPage()">Help</button>
     </div>
@@ -59,6 +59,20 @@
       }
     };
     xhr.open("GET", "@routes.HomeController.help().url", true);
+    xhr.send();
+  }
+</script>
+
+<script>
+  function loadDisplayGamePage() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        document.body.innerHTML = xhr.responseText;
+        history.pushState(null, null, "@routes.HomeController.displayGame().url");
+      }
+    };
+    xhr.open("GET", "@routes.HomeController.displayGame().url", true);
     xhr.send();
   }
 </script>
