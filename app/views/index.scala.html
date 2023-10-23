@@ -1,5 +1,51 @@
 @()
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+@main("Mastermind Online") {
+  @()
+
+  @main("Mastermind Online") {
+    <div class="header-container">
+      <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="276" width="873"/>
+
+      <div class="button-container">
+        <button class="my-button-class">New Game</button>
+
+        <button class="my-button-class" onclick="loadAboutPage()">About</button>
+      </div>
+    </div>
+  }
+
+  <style>
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .my-button-class {
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 0 10px;
+  }
+  </style>
 }
+
+<script>
+  function loadAboutPage() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        document.body.innerHTML = xhr.responseText;
+      }
+    };
+    xhr.open("GET", "@routes.HomeController.about().url", true);
+    xhr.send();
+  }
+  </script>
