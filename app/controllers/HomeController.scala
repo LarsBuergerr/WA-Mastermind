@@ -28,7 +28,22 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.displayGame(controller.game.toString(), ""))
   }
 
+  // About Page
   def about() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.about())
+  }
+
+  // Help Page
+  def help() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.help())
+  }
+
+  // Error Handling
+  def notFound() = Action { implicit request: Request[AnyContent] => 
+    NotFound(views.html.notFound())
+  }
+  
+  def badRequest(errorMessage: String) = Action {
+    BadRequest(errorMessage + "\n")
   }
 }
