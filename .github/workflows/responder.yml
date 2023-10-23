@@ -27,11 +27,11 @@ jobs:
       - name: pull_repo
         if: github.event.action == 'ping'
         run: git clone https://github.com/LarsBuergerr/mastermind.git
-      - name: goto_uno
+      - name: goto_mastermind
         if: github.event.action == 'ping'      
         run: |
           ls
-          cd uno
+          cd mastermind
           sbt assembly
       - name: delete_old_jar_and_cp_new
         if: github.event.action == 'ping'
@@ -39,7 +39,7 @@ jobs:
           ls
           rm -rf lib
           mkdir -p lib 
-          cp mastermind/target/scala-3.0.2/*.jar lib/  
+          cp mastermind/target/scala-3.1.2/*.jar lib/  
           rm -rf uno
       - name: commit_files
         if: github.event.action == 'ping'
