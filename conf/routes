@@ -6,9 +6,17 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 
+# Diplay ABOUT and HELP Pages
 GET     /about                      controllers.HomeController.about()
+GET     /help                       controllers.HomeController.help()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /game/tui                   controllers.HomeController.displayGame()
+GET     /game/displayGame           controllers.HomeController.displayGame()
+
+GET     /game/placeStones/:stones   controllers.HomeController.placeStones(stones: String)
+
+# ERROR routing
+GET     /errors/notfound            controllers.HomeController.notFound()
+GET     /errors/badrequest/         controllers.HomeController.badRequest(message: String) 

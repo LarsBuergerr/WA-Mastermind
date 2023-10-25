@@ -1,8 +1,28 @@
 @(game_str: String, error: String)
 
-@main("Mastermind"){
-    <h3 class="center" id="demo">@for(txt <- game_str.split("\n")) {
-        @txt <br>
-    }
-        <br>@error</h3>
-    }
+@main("Mastermind") {
+    <div class="header-container">
+        <div class="center" style="text-align: center;">
+            <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="260" width="850"/>
+        </div>
+        <div class="center" style="text-align: center;">
+            <div class="game-box">
+                <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block; text-align: left;">
+                    @for(txt <- game_str.split("\n")) {
+                        @txt <br>
+                    }
+                    <br>@error
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .game-box {
+            background-color: lightgray;
+            border-radius: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+    </style>
+}
