@@ -46,3 +46,8 @@
         box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.9);
     }
 }
+
+.custom-courser {
+    cursor: url("/public/images/coursers/courser_B_resized.png"), auto;
+    background-color: black;    
+}

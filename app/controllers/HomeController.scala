@@ -20,12 +20,13 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    print("THIS IS A TEST")
-    controller.currentStoneVector = controller.currentStoneVector.updated(0, Stone("R"))
-    print(controller.currentStoneVector)
-
-    print(controller.currentStoneVector(0).toString())
     Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+  }
+
+  def placeStone(stone: String, position: Int) = Action {implicit request: Request[AnyContent] =>
+    controller.currentStoneVector = controller.currentStoneVector.updated(position, Stone(stone))
+    print(controller.currentStoneVector)
+    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))  
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
