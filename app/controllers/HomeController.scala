@@ -14,19 +14,18 @@ import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.{Stone, HStone, Hi
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
   var controller = new Controller()
-  /**
-   * Create an Action to render an HTML page.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
+
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayGame(controller.gameToJson, ""))
+    print("THIS IS A TEST")
+    controller.currentStoneVector = controller.currentStoneVector.updated(0, Stone("R"))
+    print(controller.currentStoneVector)
+
+    print(controller.currentStoneVector(0).toString())
+    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
@@ -35,7 +34,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val hints = controller.game.getCode().compareTo(stoneVector)
 
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
-    Ok(views.html.displayGame(controller.gameToJson, ""))
+    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
   // About Page

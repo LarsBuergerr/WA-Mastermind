@@ -1,4 +1,7 @@
-@(game_json: play.api.libs.json.JsObject,currentStoneVector: de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.Stone ,error: String)
+@import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.Stone
+@import play.api.libs.json.{JsValue, JsObject}
+
+@(game_json: JsObject, currentStoneVector: Vector[Stone] ,error: String)
 
 <head>
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
@@ -13,20 +16,28 @@
             <div class="game-container">
                 <div class="game-box">
                     <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "matrix").as[List[play.api.libs.json.JsValue]]) {                            
-                            <div class="game-row">
-                                @for(cell <- (row \ "cells").as[List[play.api.libs.json.JsValue]]) {
-                                    <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell><img/>
+                        @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
+                            @if((row \ "row") == (game_json \ "turn")) {
+                                <div class="game-row">
+                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                                        <img src="@routes.Assets.versioned("images/stones/stone_" + currentStoneVector(cell("y").as[Int]).toString() + ".png")" class=stone-cell><img/>
                                     }
-                            </div>
+                                </div>
+                            } else {
+                                <div class="game-row">
+                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell><img/>
+                                    }
+                                </div>
+                            }
                         }
                     </h3>
                 </div>
                 <div class="hintstone-box">
                     <h3 style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "hmatrix").as[List[play.api.libs.json.JsValue]]) {
+                        @for(row <- (game_json \ "hmatrix").as[List[JsValue]]) {
                             <div class="game-row">
-                                @for(cell <- (row \ "cells").as[List[play.api.libs.json.JsValue]]) {
+                                @for(cell <- (row \ "cells").as[List[JsValue]]) {
                                     <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
                                     }
                             </div>
