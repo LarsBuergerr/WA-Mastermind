@@ -1,4 +1,4 @@
-@(game_json: play.api.libs.json.JsObject, error: String)
+@(game_json: play.api.libs.json.JsObject,currentStoneVector: de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.Stone ,error: String)
 
 <head>
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
@@ -13,13 +13,10 @@
             <div class="game-container">
                 <div class="game-box">
                     <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "matrix").as[List[play.api.libs.json.JsValue]]) {
-
-                            @if((row \ "row") == (game_json \ "turn")) 
-                            
+                        @for(row <- (game_json \ "matrix").as[List[play.api.libs.json.JsValue]]) {                            
                             <div class="game-row">
                                 @for(cell <- (row \ "cells").as[List[play.api.libs.json.JsValue]]) {
-                                    <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell onclick=@ ><img/>
+                                    <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell><img/>
                                     }
                             </div>
                         }
