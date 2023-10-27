@@ -26,7 +26,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayGame(controller.game.toString(), ""))
+    Ok(views.html.displayGame(controller.gameToJson, ""))
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
@@ -35,7 +35,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val hints = controller.game.getCode().compareTo(stoneVector)
 
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
-    Ok(views.html.displayGame(controller.game.toString(), ""))
+    Ok(views.html.displayGame(controller.gameToJson, ""))
   }
 
   // About Page

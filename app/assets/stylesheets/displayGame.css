@@ -1,0 +1,48 @@
+.game-container {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto; /* Center the containers horizontally */
+    padding: 20px; /* Add padding around the containers */
+}
+
+.game-box,
+.hintstone-box {
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    flex-basis: 48%; /* Adjust the width as needed */
+    margin: 0 10px; /* Add margin between the two boxes */
+}
+
+.game-row {
+    display: flex;
+}
+
+.stone-cell,
+.hintstone-cell {
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    text-align: center;
+    line-height: 30px;
+    margin: 4px;
+    border-radius: 50%; /* Make the cell round */
+    transition: background-color 0.3s; /* Smooth color transition on hover */
+}
+
+.stone-cell:hover {
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        background-color: transparent;
+        box-shadow: 0 0 5px 3px rgba(255, 0, 0, 0.5);
+    }
+    100% {
+        background-color: transparent;
+        box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.9);
+    }
+}
