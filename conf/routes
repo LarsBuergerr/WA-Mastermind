@@ -23,3 +23,5 @@ GET     /game/placeStone/:stone     controllers.HomeController.placeStone(stone:
 # ERROR routing
 GET     /errors/notfound            controllers.HomeController.notFound()
 GET     /errors/badrequest/         controllers.HomeController.badRequest(message: String)
+
+GET     /test                       controllers.HomeController.test()
