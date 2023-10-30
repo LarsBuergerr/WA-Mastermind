@@ -8,10 +8,12 @@
   </head>
 
 @main("Mastermind Online") {
-<body class="custom-courser">
+<body>
     <div class="header-container">
-        <div class="center" style="text-align: center;">
-            <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="230" width="750"/>
+        <div class="center" style="text-align: left;">
+            <a href="@routes.HomeController.index()">
+                <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="100" width="320"/>
+            </a>
         </div>
         <div class="center" style="text-align: center;">
             <div class="game-container">

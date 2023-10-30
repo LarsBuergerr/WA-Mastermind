@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(41, 41, 41);
+}
+
 .game-container {
     max-width: 600px;
     display: flex;
@@ -45,9 +49,4 @@
         background-color: transparent;
         box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.9);
     }
-}
-
-.custom-courser {
-    cursor: url("/public/images/coursers/courser_B_resized.png"), auto;
-    background-color: black;    
 }
