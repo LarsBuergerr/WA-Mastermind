@@ -59,6 +59,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def test() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.test2())
+    Ok(views.html.test())
   }
 }

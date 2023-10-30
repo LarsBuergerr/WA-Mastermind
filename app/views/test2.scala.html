@@ -8,31 +8,38 @@
   }
 
   .rounded {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #fff;
+    width: 40px;
+    height: 40px;
+    border: 3px solid #fff;
     border-radius: 50%;
     position: absolute;
     transform: translate3d(0, 0, 0);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s, box-shadow 0.3s;
   }
 
   .m-letter {
     font-size: 20px;
   }
+
+  .shining {
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
 </style>
 </head>
 <body>
 <div class="rounded">
-  <div class="m-letter">M</div>
+  <div class="m-letter" style="font-family: Impact;">M</div>
 </div>
 
 <script>
   const cursorRounded = document.querySelector('.rounded');
   const mLetter = document.querySelector('.m-letter');
   const colors = ['#FF5733', '#33FF57', '#5733FF', '#FFFF33', '#33FFFF'];
+  
   let colorIndex = 0;
 
   const moveCursor = (e) => {
@@ -57,6 +64,14 @@
   }
 
   window.addEventListener('wheel', changeColor);
+
+  // Add click event listener for shining effect
+  cursorRounded.addEventListener('click', () => {
+    cursorRounded.classList.add('shining');
+    setTimeout(() => {
+      cursorRounded.classList.remove('shining');
+    }, 500); // Adjust the duration as needed (in milliseconds)
+  });
 </script>
 </body>
 </html>
