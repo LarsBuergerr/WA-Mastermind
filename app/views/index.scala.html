@@ -8,18 +8,29 @@
   @()
 
   <div class="header-container">
-    <ul>
-      <li><a href="@routes.HomeController.displayGame()">New Game</a></li>
-      <li><a href="@routes.HomeController.help()">Help</a></li>
-      <li style="float:right"><a class="active" href="@routes.HomeController.about()">About</a></li>
-    </ul>
     <img src="@routes.Assets.versioned("images/mastermind_header.png")"/>
-    <!--
+    
     <div class="button-container">
-      <button class="my-button-class" onclick="window.location.href='@routes.HomeController.displayGame()';">New Game</button>
-      <button class="my-button-class" onclick="window.location.href='@routes.HomeController.about()';">About</button>
-      <button class="my-button-class" onclick="window.location.href='@routes.HomeController.help()';">Help</button>
+
+      <a href="@routes.HomeController.displayGame()">
+        <button class="button-new_game">
+          <span class="button-text">Play</span>
+        </button>
+      </a>
+      
+      <a href="@routes.HomeController.help()">
+        <button class="button-help">
+          <span class="button-text">Help</span>
+        </button>
+      </a>
+
+      <a href="@routes.HomeController.about()">
+        <button class="button-about">
+          <span class="button-text">About</span>
+        </button>
+      </a>
+
     </div>
-    -->
+    
   </div>
 }
