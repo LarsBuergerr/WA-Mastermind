@@ -49,7 +49,7 @@
                     </h3>
                 </div>
             </div>
-            <button id="placeStonesButton">Place Stones</button>
+            <button id="placeStonesButton" onclick="placeStones()">Place Stones</button>
         </div>
     </div>
     <script>
@@ -57,7 +57,7 @@
         var eventListeners = []; // Store event listeners
 
         function startChangeStone(element, pos) {
-            var possible_stones = ["E", "R", "G", "B", "Y", "P", "W"];
+            var possible_stones = ["R", "G", "B", "Y", "P", "W"];
             var current_stone = element.src.split("_")[1].split(".")[0];
 
             function scrollHandler(event) {
@@ -81,6 +81,13 @@
                 element.removeEventListener("wheel", eventListeners[pos]);
             }
         }
-      </script>
+
+        function placeStones() {
+            var stoneArrayString = stoneArray.join("");
+            
+            // route to /game/placeStones/:stones
+            window.location.href = "/game/placeStones/" + stoneArrayString;
+        }
+    </script>
 </body>
 }
