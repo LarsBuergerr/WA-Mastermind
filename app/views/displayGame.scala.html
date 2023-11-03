@@ -22,9 +22,9 @@
                         @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
                             @if((row \ "row") == (game_json \ "turn")) {
                                 <div class="game-row">
-                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_" + currentStoneVector(cell("y").as[Int]).toString() + ".png")" class=stone-cell 
-                                            onclick="window.location.href='@routes.HomeController.placeStone("G", cell("y").as[Int]).toString()';"><img/>
+                                    @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
+                                        <img src="@routes.Assets.versioned("images/stones/stone_" + currentStoneVector(cell("y").as[Int]).toString() + ".png")" class="stone-cell"
+                                                onmouseover="changeStoneOnScroll(this, @index)">
                                     }
                                 </div>
                             } else {
@@ -51,5 +51,42 @@
             </div>
         </div>
     </div>
+    <script>
+        // // Define a variable to store the current stone ID
+        // let currentStoneId = 1;
+      
+        // // Function to change the stone image source
+        // function updateStoneImage(img_src) {
+        //   img_src.src = '@routes.Assets.versioned("images/stones/stone_")' + currentStoneVector[currentStoneId - 1] + '.toString() + ".png"';
+        // }
+      
+        // // Function to change the stone image on scroll
+        // function changeStoneOnScroll(img_src) {
+        //   console.log("changeStoneOnScroll")
+        //   window.addEventListener("wheel", (event) => {
+        //     event.preventDefault();
+        //     if (event.deltaY > 0) {
+        //       currentStoneId = (currentStoneId % currentStoneVector.length) + 1;
+        //     } else {
+        //       currentStoneId = currentStoneId - 1 <= 0 ? currentStoneVector.length : currentStoneId - 1;
+        //     }
+      
+        //     // Update the image source
+        //     updateStoneImage(img_src);
+        //   });
+        // }
+        
+        // take the current stone vektor into javasccript variable
+    
+        function changeStoneOnScroll(element, pos) {
+            console.log(pos);
+            possible_stones = ["E", "R", "G", "B", "Y", "P", "W"];
+            current_stone = element.src.split("_")[1].split(".")[0];
+            
+            console.log(current_stone);
+
+            element.src = "/assets/images/stones/stone_B.png";
+        }
+      </script>
 </body>
 }

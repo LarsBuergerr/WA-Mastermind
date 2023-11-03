@@ -2,6 +2,23 @@ body {
     background-color: rgb(41, 41, 41);
 }
 
+.rounded {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate3d(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+
+  .m-letter {
+    font-size: 20px;
+}
+
 .game-container {
     max-width: 600px;
     display: flex;
