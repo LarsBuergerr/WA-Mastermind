@@ -54,7 +54,7 @@ body {
 }
 
 .stone-cell:hover {
-    animation: glow 1s infinite alternate;
+    animation: glow 1s infinite alternate, scrollIndication 1s infinite linear;
 }
 
 @keyframes glow {
@@ -67,3 +67,17 @@ body {
         box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.9);
     }
 }
+
+@keyframes scrollIndication {
+    0% {
+        transform: translateY(-2px);
+    }
+    50% {
+        transform: translateY(2px);
+    }
+    100% {
+        transform: translateY(-2px);
+    }
+}
+
+
