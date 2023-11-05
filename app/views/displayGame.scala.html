@@ -10,10 +10,12 @@
 @main("Mastermind Online") {
 <body>
     <div class="header-container">
-        <div class="center" style="text-align: left;">
-            <a href="@routes.HomeController.index()">
-                <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="100" width="320"/>
-            </a>
+        <div class="top-bar">
+            <div class="play-stones">
+                @for(i <- 1 to 10) {
+                    <img src="@routes.Assets.versioned(s"images/stones/stone_" + scala.util.Random.shuffle(Seq("R", "G", "B", "Y", "P", "W")).head + ".png")" class="play-stone" />
+                }
+            </div>
         </div>
         <div class="center" style="text-align: center;">
             <div class="game-container">
@@ -23,14 +25,14 @@
                             @if((row \ "row") == (game_json \ "turn")) {
                                 <div class="game-row">
                                     @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_E.png")" class="stone-cell"
+                                        <img src="@routes.Assets.versioned("images/stones/stone_A.png")" class="stone-cell"
                                         onmouseover="startChangeStone(this, @index)" onmouseout="stopChangeStone(this, @index)">
                                     }
                                 </div>
                             } else {
                                 <div class="game-row">
                                     @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell><img/>
+                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell-locked><img/>
                                     }
                                 </div>
                             }
@@ -43,7 +45,7 @@
                             <div class="game-row">
                                 @for(cell <- (row \ "cells").as[List[JsValue]]) {
                                     <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
-                                    }
+                                }
                             </div>
                         }
                     </h3>
