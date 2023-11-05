@@ -15,7 +15,7 @@
     <script>
         (function() {
         window.onload = function() {
-            window.mySparticles = new Sparticles({shape: "image",minSize: 10, maxSize: 100 ,imageUrl: ["/assets/images/stones/stone_Siluette_small.png"]});
+            window.mySparticles = new Sparticles({shape: "image",minSize: 10, maxSize: 100 ,imageUrl: ["/assets/images/stones/stone_Siluette_small.png"], color: ["blue", "red", "purple"], count: 100});
         }
         }());
     </script>
@@ -27,7 +27,7 @@
         <div class="top-bar">
             <div class="play-stones">
                 @for(i <- 1 to 10) {
-                    <img src="@routes.Assets.versioned(s"images/stones/stone_" + scala.util.Random.shuffle(Seq("R", "G", "B", "Y", "P", "W")).head + ".png")" class="play-stone" />
+                    <img src="@routes.Assets.versioned(s"images/stones/stone_" + scala.util.Random.shuffle(Seq("R","B","P")).head + ".png")" class="play-stone" />
                 }
             </div>
         </div>
