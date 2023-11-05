@@ -57,8 +57,4 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def badRequest(errorMessage: String) = Action {
     BadRequest(errorMessage + "\n")
   }
-
-  def test() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.test())
-  }
 }

@@ -3,9 +3,23 @@
 
 @(game_json: JsObject, currentStoneVector: Vector[Stone] ,error: String)
 
+<!DOCTYPE html>
+<html>
 <head>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
-  </head>
+    <meta charset="UTF-8">
+    <title>Your Page Title</title>
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
+
+    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/sparticles.js")"></script>
+
+    <script>
+        (function() {
+        window.onload = function() {
+            window.mySparticles = new Sparticles();
+        }
+        }());
+    </script>
+</head>
 
 @main("Mastermind Online") {
 <body>
@@ -51,9 +65,10 @@
                     </h3>
                 </div>
             </div>
-            <button id="placeStonesButton" onclick="placeStones()">Place Stones</button>
+            <button class="placeStonesButton" onclick="placeStones()">Place Stones</button>
         </div>
     </div>
+    <!-- script source is lib/sparticles.js -->
     <script>
         var stoneArray = ["E", "E", "E", "E"];
         var eventListeners = []; // Store event listeners
