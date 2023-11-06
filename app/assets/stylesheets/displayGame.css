@@ -1,3 +1,8 @@
+body{
+  background-color: rgb(41, 41, 41);
+  font-family: Arial, sans-serif;
+}
+
 .sparticles {
     position: fixed;
     top: 0;
@@ -36,21 +41,24 @@
 .game-container {
     max-width: 600px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin: 0 auto; /* Center the containers horizontally */
     padding: 20px; /* Add padding around the containers */
     z-index: 0;
+    flex-direction: row;
 }
 
 .game-box,
 .hintstone-box {
-    background-color: lightgray;
+    background-color: rgb(87, 87, 87);
     border-radius: 10px;
     padding: 10px;
     display: inline-block;
     flex-basis: 48%; /* Adjust the width as needed */
     margin: 0 10px; /* Add margin between the two boxes */
     z-index: 1;
+    flex-direction: row;
 }
 
 .game-row {
@@ -74,6 +82,70 @@
 .stone-cell:hover {
     animation: glow 1s infinite alternate, scrollIndication 1s infinite linear;
 }
+
+.placeStonesButton {
+  width: 220px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.placeStonesButton:before {
+  content: '';
+  background:  linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left:-2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.placeStonesButton:active {
+  color: rgb(87, 87, 87);
+}
+
+.placeStonesButton:active:after {
+  background: transparent;
+}
+
+.placeStonesButton:hover:before {
+  opacity: 1;
+}
+
+.placeStonesButton:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgb(87, 87, 87);;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+
 
 @keyframes glow {
     0% {
@@ -102,9 +174,6 @@
     }
 }
 
-.placeStonesButton {
-    z-index: 1;
-    position: relative;
-}
+
 
 
