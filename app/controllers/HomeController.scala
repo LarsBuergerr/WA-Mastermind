@@ -19,6 +19,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
   }
 
+  def createGame() = Action { implicit request: Request[AnyContent] =>
+    controller = new Controller()
+    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+  }
+
   def displayGame() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
   }
