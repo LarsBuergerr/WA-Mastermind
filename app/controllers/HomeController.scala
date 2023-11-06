@@ -23,6 +23,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
+  def displayWinPage() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.displayWinPage(controller.gameToJson, controller.currentStoneVector, ""))
+  }
+
+  def displayLosePage() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
+  }
+
   def placeStone(stone: String, position: Int) = Action {implicit request: Request[AnyContent] =>
     controller.currentStoneVector = controller.currentStoneVector.updated(position, Stone(stone))
     Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))  
@@ -33,10 +41,18 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
 
+    print(controller.game.getCode())
     //reset currentStoneVector to only empty stones
     controller.currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller.game.field.matrix.cols)(Stone("E")))
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
-    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+
+    if(hints.forall(p => p.stringRepresentation.equals("R"))) {
+      Ok(views.html.displayWinPage(controller.gameToJson, controller.currentStoneVector, ""))
+    } else if(controller.game.getRemainingTurns().equals(0)) {
+      Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
+    } else {
+      Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+    }
   }
 
   // About Page
