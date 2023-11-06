@@ -25,11 +25,7 @@
 <body>
     <div class="header-container">
         <div class="top-bar">
-            <div class="play-stones">
-                @for(i <- 1 to 10) {
-                    <img src="@routes.Assets.versioned(s"images/stones/stone_" + scala.util.Random.shuffle(Seq("R","B","P")).head + ".png")" class="play-stone" />
-                }
-            </div>
+            <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="logo-img" width="600">
         </div>
         <div class="center" style="text-align: center;">
             <div class="game-container">
@@ -72,6 +68,20 @@
     <script>
         var stoneArray = ["E", "E", "E", "E"];
         var eventListeners = []; // Store event listeners
+    
+        function createErrorPopup(message) {
+            var errorPopup = document.createElement("div");
+            errorPopup.className = "error-popup";
+            errorPopup.innerHTML = message;
+            document.body.appendChild(errorPopup);
+
+            setTimeout(function () {
+                errorPopup.style.opacity = 0;
+                setTimeout(function () {
+                    errorPopup.remove();
+                    }, 1000);
+                }, 3000); // 3000 milliseconds (3 seconds) until it disappears
+        }
 
         function startChangeStone(element, pos) {
             var possible_stones = ["R", "G", "B", "Y", "P", "W"];
@@ -88,23 +98,29 @@
                 stoneArray[pos] = current_stone;
                 console.log(stoneArray);
             }
-
+    
             element.addEventListener("wheel", scrollHandler);
             eventListeners[pos] = scrollHandler;
         }
-
+    
         function stopChangeStone(element, pos) {
             if (eventListeners[pos]) {
                 element.removeEventListener("wheel", eventListeners[pos]);
             }
         }
-
+    
         function placeStones() {
-            var stoneArrayString = stoneArray.join("");
-            
-            // route to /game/placeStones/:stones
-            window.location.href = "/game/placeStones/" + stoneArrayString;
+            if (stoneArray.includes("E")) {
+                // Check if there are still empty stones in the array
+                createErrorPopup("Please fill all stones before placing them!");
+            } else {
+                var stoneArrayString = stoneArray.join("");
+    
+                // Route to /game/placeStones/:stones
+                window.location.href = "/game/placeStones/" + stoneArrayString;
+            }
         }
     </script>
+    
 </body>
 }

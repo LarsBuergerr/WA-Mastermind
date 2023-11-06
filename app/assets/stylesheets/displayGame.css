@@ -13,30 +13,16 @@ body{
 }
 
 .top-bar {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    border-radius: 10px;
     padding: 10px;
-}
-
-.play-stones {
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 10px; /* Adjust the margin as needed */
-    margin-top:10px;
+    margin: 0 auto; /* Center the containers horizontally */
+    padding: 20px; /* Add padding around the containers */
+    z-index: 0;
+    flex-direction: row;
 }
-
-.play-stone {
-    width: 60px;
-    height: 60px;
-    margin: 0 10px; /* Adjust the margin as needed */
-    border: 2px solid #fff;
-    border-radius: 50%;
-    display: inline-block;
-    background-color: transparent;
-}
-
 
 .game-container {
     max-width: 600px;
@@ -174,6 +160,19 @@ body{
     }
 }
 
+
+.error-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: red;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 1s;
+    z-index: 999;
+}
 
 
 
