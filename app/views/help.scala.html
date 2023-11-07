@@ -1,92 +1,70 @@
 @()
 
+<head>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/help.css")">
+</head>
+
 @main("Mastermind Online") {
   @()
   <body>
-
+      
     <div class="container">
 
-      <div class="header">
-        <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="276" width="873"/>
+      <div>
+        <a href="@routes.HomeController.index()">
+          <img src="@routes.Assets.versioned("images/mastermind_header.png")" />
+        </a>
       </div>
-      
-      <div class="section">
+
+      <div>
+        
         <h2>How to play</h2>
-
-        <div class="section_table">
-          <table>
-            <tr>
-              <th class="left-align">Icon</th>
-              <th class="left-align">Description</th>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/coursers/courser_R.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Courser shows the current selected color which is used when placing stones</span></td>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/info/scroll.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Scroll down your mouse wheel to change the courser color and therefore the stone placing color</span></td>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/info/left-click.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Place your guess on an empty stone in the current row (see point below)</span></td>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/stones/stone_A.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Empty stone where you can place your hint (Shows the active row)</span></td>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/hintstones/hstone_W.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Hint that shows you that you guess a right color but at the wrong position</span></td>
-            </tr>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/hintstones/hstone_R.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> Hint that shows you that you guess a right color and at the right position</span></td>
-            </tr>
-          </table>
-        </div>
-      </div> 
-
-      <div class="section">
-        <h2>Win/Lose</h2>
-      
-        <div class="section_table">
-          <table>
-            <tr>
-              <td style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/stones/stone_win.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> You won the game if you guess the secret code so that all hint stones are red.</span></td>
-            </tr>
-            <tr>
-              <td  style="padding-right: 10px;"><img src="@routes.Assets.versioned("images/stones/stone_A.png")" style="width:50px;"/></td>
-              <td><span style="font-size:larger;"> You lose the game if you used all your tries and you did not guess the secret code.</span></td>
-            </tr>
-          </table>
-        </div>
+        <table>
+          <tr>
+            <th>Icon</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/coursers/courser_R.png")"/></td>
+            <td><span> Courser shows the current selected color which is used when placing stones</span></td>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/info/scroll.png")"/></td>
+            <td><span> Scroll down your mouse wheel to change the courser color and therefore the stone placing color</span></td>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/info/left-click.png")"/></td>
+            <td><span> Place your guess on an empty stone in the current row (see point below)</span></td>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/stones/stone_A.png")"/></td>
+            <td><span> Empty stone where you can place your hint (Shows the active row)</span></td>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/hintstones/hstone_W.png")"/></td>
+            <td><span> Hint that shows you that you guess a right color but at the wrong position</span></td>
+          </tr>
+          <tr>
+            <td><img src="@routes.Assets.versioned("images/hintstones/hstone_R.png")"/></td>
+            <td><span> Hint that shows you that you guess a right color and at the right position</span></td>
+          </tr>
+        </table>
       </div>
+
+      <div>
+        <h2>Win/Lose</h2>
+          <table>
+            <tr>
+              <td><img src="@routes.Assets.versioned("images/stones/stone_win.png")"/></td>
+              <td><span> You won the game if you guess the secret code so that all hint stones are red.</span></td>
+            </tr>
+            <tr>
+              <td><img src="@routes.Assets.versioned("images/stones/stone_A.png")"/></td>
+              <td><span> You lose the game if you used all your tries and you did not guess the secret code.</span></td>
+            </tr>
+          </table>
+      </div>
+    </div> 
       
-      <style>
-        .header {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-      </style>
-
-      <style>
-        .section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          font-family: 'Roboto', sans-serif;
-        }
-      </style>
-
-      <style>
-        .left-align {
-          text-align: left;
-          font-size: 18px;
-        }
-      </style>
-    </div>
   </body>
 }

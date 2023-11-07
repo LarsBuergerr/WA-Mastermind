@@ -4,11 +4,11 @@ scalacOptions += "-Ytasty-reader"
 exportJars := true
 
 lazy val root = (project in file("."))
-    .enablePlugins(PlayScala)
+    .enablePlugins(PlayScala, SbtWeb)
     .settings(
         name:= """WA-Mastermind""",
         libraryDependencies ++= Seq(
             guice,
-            "org.scalatestplus.play" %% "scalatestplus-play" % "6.0.0-RC2" % Test
+            "org.scalatestplus.play" %% "scalatestplus-play" % "6.0.0-RC2" % Test,
                     )
     )

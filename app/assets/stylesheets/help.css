@@ -1,0 +1,49 @@
+/* Set a background color and font for the entire page */
+body {
+  background-color: rgb(41, 41, 41);
+  font-family: Arial, sans-serif;
+}
+
+/* Style the container */
+.container {
+  width: 80em;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the header image */
+img {
+  display: block;
+  margin: 0 auto;
+  width: 60em;
+}
+
+h2 {
+  font-size: 24px;
+  background: linear-gradient(to bottom, red, blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+td img {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  display: block;
+  padding: 2px;
+}
+
+/* Style table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  color: aliceblue;
+  margin: auto;
+}
+
+th{
+  text-align: left;
+}

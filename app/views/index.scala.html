@@ -1,87 +1,36 @@
 @()
 
+<head>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/index.css")">
+</head>
+
 @main("Mastermind Online") {
   @()
 
   <div class="header-container">
-    <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="276" width="873"/>
+    <img src="@routes.Assets.versioned("images/mastermind_header.png")"/>
+    
     <div class="button-container">
-      <button class="my-button-class" onclick="loadDisplayGamePage()">New Game</button>
-      <button class="my-button-class" onclick="loadAboutPage()">About</button>
-      <button class="my-button-class" onclick="loadHelpPage()">Help</button>
+
+      <a href="@routes.HomeController.displayGame()">
+        <button class="button-new_game">
+          <span class="button-text">Play</span>
+        </button>
+      </a>
+      
+      <a href="@routes.HomeController.help()">
+        <button class="button-help">
+          <span class="button-text">Help</span>
+        </button>
+      </a>
+
+      <a href="@routes.HomeController.about()">
+        <button class="button-about">
+          <span class="button-text">About</span>
+        </button>
+      </a>
+
     </div>
+    
   </div>
-
-  <style>
-  .header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .button-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 20px;
-  }
-
-  .my-button-class {
-    font-size: 20px;
-    padding: 10px 20px;
-    margin: 0 10px;
-  }
-  </style>
 }
-
-<!-- Java Script for click event on About Button -->
-<script>
-  function loadAboutPage() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        document.body.innerHTML = xhr.responseText;
-        history.pushState(null, null, "@routes.HomeController.about().url");
-      }
-    };
-    xhr.open("GET", "@routes.HomeController.about().url", true);
-    xhr.send();
-  }
-</script>
-
-<script>
-  function loadHelpPage() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        document.body.innerHTML = xhr.responseText;
-        history.pushState(null, null, "@routes.HomeController.help().url");
-      }
-    };
-    xhr.open("GET", "@routes.HomeController.help().url", true);
-    xhr.send();
-  }
-</script>
-
-<script>
-  function loadDisplayGamePage() {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        document.body.innerHTML = xhr.responseText;
-        history.pushState(null, null, "@routes.HomeController.displayGame().url");
-      }
-    };
-    xhr.open("GET", "@routes.HomeController.displayGame().url", true);
-    xhr.send();
-  }
-</script>
-
-<!-- Java Script for click event on Reverse Button in the Browser -->
-<script>
-  window.addEventListener("popstate", function(event) {
-    if (event.state === null) {
-      location.reload();
-    }
-  });
-  </script>

@@ -11,3 +11,4 @@ target
 /.cache
 /.vscode
 /RUNNING_PID
+/public/javascripts/sparticles.js

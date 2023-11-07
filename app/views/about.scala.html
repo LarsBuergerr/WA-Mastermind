@@ -1,11 +1,17 @@
 @()
 
+<head>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/about.css")">
+</head>
+
 @main("Mastermind Online") {
   @()
   <body>
     <div class="container">
 
-        <img src="@routes.Assets.versioned("images/mastermind_header.png")" height="276" width="873"/>
+      <a href="@routes.HomeController.index()">
+        <img src="@routes.Assets.versioned("images/mastermind_header.png")" />
+      </a>
 
         <div class="section">
           <h2>Description</h2>
@@ -33,23 +39,6 @@
           <a href="https://github.com/Smokey95">Smokey95</a>
 
         </div>
-
-        <style>
-            .container {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-            }
-        </style>
-
-        <style>
-            .section {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              font-family: 'Roboto', sans-serif;
-            }
-        </style>
     </div>
   </body>
 }
