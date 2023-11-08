@@ -18,11 +18,12 @@ body {
 
 
 /*/* Apply settings so image is centered */
-img {
+.header-img {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 80%;
+  margin-top: 20px;
 }
 
 /* Navbar padding */
@@ -38,6 +39,34 @@ img {
 
   border: none;
   background-color: transparent;
+}
+
+.offcanvas-header{
+  background: linear-gradient(to bottom, red, rgb(56, 56, 252)); /* Apply linear gradient to the text color */
+  -webkit-background-clip: text; /* Set the background clip to text for webkit browsers */
+  -webkit-text-fill-color: transparent; /* Set the text fill color to transparent for webkit browsers */
+}
+
+.nav-link {
+  color: aliceblue !important;
+}
+
+.nav-icon{
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.nav-link:hover {
+  background: linear-gradient(to bottom, red, rgb(56, 56, 252)); /* Apply linear gradient to the text color */
+  -webkit-background-clip: text; /* Set the background clip to text for webkit browsers */
+  -webkit-text-fill-color: transparent; /* Set the text fill color to transparent for webkit browsers */
+}
+
+.offcanvas {
+  background-color: rgba(41, 41, 41, 0.8); /* black with 80% opacity */
 }
 /*
 /*.button-container {
