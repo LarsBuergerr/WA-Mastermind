@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject._
+import play.twirl.api.Html
 import play.api._
 import play.api.mvc._
 import java.lang.ProcessBuilder.Redirect
@@ -14,6 +15,12 @@ import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.{Stone, HStone, Hi
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
   var controller = new Controller()
+
+  def main(title: String) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.main(title) {
+      Html("")
+    })
+  }
 
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())

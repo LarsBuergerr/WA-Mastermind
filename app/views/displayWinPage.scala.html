@@ -3,24 +3,20 @@
 
 @(game_json: JsObject, currentStoneVector: Vector[Stone] ,error: String)
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>YOU WIN</title>
-    <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/displayWinPage.css")">
+@main("Winner Winner Chicken Dinner!") {
 
-    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/sparticles.js")"></script>
-    <script>
-        (function() {
-        window.onload = function() {
-            window.mySparticles = new Sparticles({shape: "image",minSize: 10, maxSize: 100 ,imageUrl: ["/assets/images/stones/stone_Siluette_small.png"], color: ["gold"], count: 100});
-        }
-        }());
-    </script>
-</head>
+  <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/displayWinPage.css")">
 
-@main("Mastermind Online") {
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/sparticles.js")"></script>
+  <script>
+      (function() {
+      window.onload = function() {
+          window.mySparticles = new Sparticles({shape: "image",minSize: 10, maxSize: 100 ,imageUrl: ["/assets/images/stones/stone_Siluette_small.png"], color: ["gold"], count: 100});
+      }
+      }());
+  </script>
+
 <body>
     <div class="header-container">
         <div class="top-bar">

@@ -6,6 +6,7 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 GET     /index                      controllers.HomeController.index()
+GET     /main/:title                controllers.HomeController.main(title: String)
 
 # Diplay ABOUT and HELP Pages
 GET     /about                      controllers.HomeController.about()
