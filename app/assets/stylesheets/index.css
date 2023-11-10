@@ -1,10 +1,128 @@
-/* Apply settings so image is centered */
-.header-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  margin-top: 2rem;
+@import "displayGame.css";
+
+.stones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 150vh;
+}
+
+.game {
+  position: absolute;
+  width: 100%;
+  top: 100vh;
+  left: 0;
+  height: 95vh;
+  z-index: 4;
+}
+
+.front_text {
+  text-align: center;
+  padding: 10px; /* Add padding to make the text more visible */
+  position: relative;
+  z-index: 2; /* Set a higher z-index value */
+  color: rgb(255, 255, 255);
+  font-size: 5em;
+  margin-top: -500px;
+}
+
+.stone_B {
+  position: absolute;
+  left: -15%;
+  top: -10%;
+  width: 30%;
+  filter: brightness(0.8);
+  overflow-x: hidden;
+}
+
+.stone_G {
+  position: absolute;
+  left: 80%;
+  top: -10%;
+  width: 35%;
+  filter: brightness(0.8);
+}
+
+.stone_R {
+  position: absolute;
+  left: -10%;
+  top: 25%;
+  width: 40%;
+  filter: brightness(0.9);
+}
+
+.stone_Y {
+  position: absolute;
+  left: 15%;
+  top: -50%;
+  width: 50%;
+  filter: brightness(0.7)
+}
+.stone_W {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 50%;
+  filter: brightness(0.5);
+}
+.stone_P {
+  position: absolute;
+  left: 80%;
+  top: 35%;
+  filter: brightness(0.9)
+}
+
+.stone_win {
+  position: absolute;
+  left: 20%;
+  top: 0;
+  width: 60%;
+ filter: brightness(0.3);
+}
+
+
+@media only screen and (max-width: 768px) {
+  .front_text {
+    font-size: 3em;
+    margin-top: -200px;
+  }
+
+  .stone_B,
+  .stone_G,
+  .stone_R,
+  .stone_Y,
+  .stone_W,
+  .stone_P,
+  .stone_win {
+    width: 100%;
+  }
+
+  .stones {
+    height: 100vh;
+  }
+
+  .stone_B,
+  .stone_G,
+  .stone_R,
+  .stone_Y,
+  .stone_W,
+  .stone_P,
+  .stone_win {
+    position: static;
+    margin: 0 auto;
+    filter: brightness(1);
+  }
+
+  .game {
+    top: 90vh;
+    height: auto;
+  }
+
+  .front_text {
+    margin-top: -200px;
+  }
 }
 
 /* Apply settings so image on mobile devices */

@@ -23,7 +23,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+    Ok(views.html.index(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
