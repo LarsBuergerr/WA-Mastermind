@@ -2,25 +2,27 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        @* Here's where we render the page title `String`. *@
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/logo.png")">
 
-        <!-- Bootstrap 5 CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <head>
+    @* Here's where we render the page title `String`. *@
+    <title>@title</title>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/logo.png")">
 
-        <!-- Bootstrap 5 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- iQuery and Popper.js (required for Bootstrap's JavaScript plugins) -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    </head>
+    <!-- iQuery and Popper.js (required for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  
+  </head> <!-- End of head -->
 
     <body>
+
       <nav class="navbar navbar-dark bg-dark fixed-top">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
           <img class="navbar-icon" src="@routes.Assets.versioned("images/stones/stone_R_nav.png")" alt="Menu">
@@ -62,8 +64,41 @@
         </div>
       </div>
 
+      <!-- Orientation change detection message -->
+      <div class="orientationMessage">
+        <p class="orientationText">Please turn your device back to vertical orientation.</p>
+        <img src="@routes.Assets.versioned("images/info/change_orientation.png")" class="orientation-icon">
+      </div>
+
       <!-- This is where the page content goes -->
       @content
 
+      <!-- Orientation change detection -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var messageElement = document.querySelector('.orientationMessage');
+
+        var checkOrientation = function() {
+          // Check if the user is on a mobile device
+          var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+          
+          console.log('checkOrientation triggered');
+        
+          if (isMobile && window.innerHeight < window.innerWidth) {
+            // Landscape mode
+            messageElement.style.display = 'block';
+          } else {
+            // Portrait mode
+            messageElement.style.display = 'none';
+          }
+        };
+      
+        // Check the orientation when the page loads
+        checkOrientation();
+      
+        // Check the orientation when the window is resized
+        window.addEventListener('resize', checkOrientation);
+        });
+      </script>
     </body>
 </html>

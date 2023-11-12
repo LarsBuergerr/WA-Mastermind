@@ -64,6 +64,45 @@ body {
   font-size: 2rem;
 }
 
+
+.orientationMessage{
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background-color: rgba(41, 41, 41, 0.8);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+
+  padding-top:2rem ;
+
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.orientationText {
+  font-size: 2rem;
+  background: linear-gradient(to bottom, red, rgb(56, 56, 252));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.orientation-icon{
+  width: 15rem;
+  animation: wiggle 1s infinite;
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  100% { transform: rotate(-5deg); }
+}
+
 /* Increase font size and icon size on small screens */
 @media (max-width: 1080px) {
 
