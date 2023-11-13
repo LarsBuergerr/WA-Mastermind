@@ -87,9 +87,6 @@
       stone_W_offset = parseFloat(getComputedStyle(stone_W).left);
       stone_P_offset = parseFloat(getComputedStyle(stone_P).left);
       stone_win_offset = parseFloat(getComputedStyle(stone_win).top);
-        
-      //log the offset of the stone_R
-      console.log(stone_R_offset);
 
       window.addEventListener('scroll', () => {
         let value = window.scrollY;

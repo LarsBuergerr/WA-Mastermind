@@ -77,6 +77,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.help())
   }
 
+  // Pricing Page
+  def pricing() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.pricing())}
+
+  def login() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.login())
+  }
+
   // Error Handling
   def notFound() = Action { implicit request: Request[AnyContent] => 
     NotFound(views.html.notFound())
