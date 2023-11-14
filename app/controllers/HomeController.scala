@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject._
+import play.twirl.api.Html
 import play.api._
 import play.api.mvc._
 import java.lang.ProcessBuilder.Redirect
@@ -15,8 +16,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
   var controller = new Controller()
 
+  def main(title: String) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.main(title) {
+      Html("")
+    })
+  }
+
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+    Ok(views.html.index(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
@@ -68,6 +75,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // Help Page
   def help() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.help())
+  }
+
+  // Pricing Page
+  def pricing() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.pricing())}
+
+  def login() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.login())
   }
 
   // Error Handling

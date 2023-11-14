@@ -1,49 +1,75 @@
-/* Set a background color and font for the entire page */
-body {
-  background-color: rgb(41, 41, 41);
-  font-family: Arial, sans-serif;
-}
-
 /* Style the container */
 .container {
-  width: 80em;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 }
 
 /* Style the header image */
 img {
+  max-width: 100%;                                /* 100% of parent container */
   display: block;
   margin: 0 auto;
-  width: 60em;
 }
 
-h2 {
-  font-size: 24px;
+/* Style sections */
+.section {
+  margin-top: 2rem;
+  color: aliceblue;
+}
+
+/* Style section headings */
+.section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
   background: linear-gradient(to bottom, red, blue);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-td img {
-  width: 50px;
-  height: 50px;
+.section td img {
+  width: 4rem;
+  height: 4rem;
   margin: 0 auto;
   display: block;
-  padding: 2px;
+  margin-top: 0.5rem;
 }
 
 /* Style table */
-table {
+.section table {
   border-collapse: collapse;
   width: 100%;
-  color: aliceblue;
   margin: auto;
 }
 
-th{
+.section th{
   text-align: left;
+}
+
+/* Increase font size and icon size on small screens */
+@media (max-width: 1080px) {
+
+  .container {
+    margin-top: 7rem;
+    max-width:max-content;
+  }
+
+  .section h2 {
+    font-size: 4rem;
+  }
+
+  .section td {
+    min-width: 8rem; /* Adjust as needed */
+  }
+
+  .section td img {
+    width: 8rem;
+    height: 8rem;
+    margin-top: 1rem;
+  }
+
+  .section td span {
+    font-size: 2rem;
+  }
 }

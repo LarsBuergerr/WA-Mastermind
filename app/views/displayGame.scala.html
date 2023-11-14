@@ -3,66 +3,56 @@
 
 @(game_json: JsObject, currentStoneVector: Vector[Stone] ,error: String)
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Can you guess the code?</title>
-    <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
 
-    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/sparticles.js")"></script>
-    <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
-    <script>
-        (function() {
-        window.onload = function() {
-            window.mySparticles = new Sparticles({shape: "image",minSize: 10, maxSize: 100 ,imageUrl: ["/assets/images/stones/stone_Siluette_small.png"], color: ["blue", "red", "purple"], count: 100});
-        }
-        }());
-    </script>
-</head>
+@main("Can you guess the code?") {
 
-@main("Mastermind Online") {
-<body>
-    <div class="header-container">
-        <div class="top-bar">
-            <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="logo-img" width="600">
-        </div>
-        <div class="center" style="text-align: center;">
-            <div class="game-container">
-                <div class="game-box">
-                    <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
-                            @if((row \ "row") == (game_json \ "turn")) {
-                                <div class="game-row">
-                                    @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_A.png")" class="stone-cell"
-                                        onmouseover="startChangeStone(this, @index)" onmouseout="stopChangeStone(this, @index)">
-                                    }
-                                </div>
-                            } else {
-                                <div class="game-row">
-                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell-locked><img/>
-                                    }
-                                </div>
-                            }
-                        }
-                    </h3>
-                </div>
-                <div class="hintstone-box">
-                    <h3 style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "hmatrix").as[List[JsValue]]) {
-                            <div class="game-row">
-                                @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                    <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
-                                }
-                            </div>
-                        }
-                    </h3>
-                </div>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/displayGame.css")">
+
+  <!-- Scripts -->
+  <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
+
+  <body>
+
+    <!-- Header -->
+    <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="logo-img">
+
+    <div class="game-container">
+      <!-- Game box (stones) -->
+      <div class="game-box">
+        @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
+          @if((row \ "row") == (game_json \ "turn")) {
+            <div class="game-row">
+            @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
+              <img src="@routes.Assets.versioned("images/stones/stone_A.png")" class="stone-cell"
+              onmouseover="startChangeStone(this, @index)" onmouseout="stopChangeStone(this, @index)">
+            }
             </div>
-            <button class="placeStonesButton" onclick="placeStones()">Place Stones</button>
-        </div>
-    </div>
-</body>
+          } else {
+            <div class="game-row">
+              @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell-locked><img/>
+              }
+            </div>
+          }
+        }
+      </div>  <!-- End of game-box -->
+
+      <!-- Hintstone box -->
+      <div class="hintstone-box">
+        @for(row <- (game_json \ "hmatrix").as[List[JsValue]]) {
+          <div class="game-row">
+            @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
+            }
+          </div>
+        }
+      </div>  <!-- End of hintstone-box -->
+    </div>    <!-- End of game-container -->
+
+    <!-- Place stones -->
+    <button class="placeStonesButton" onclick="placeStones()">Place Stones</button>
+
+  </body>       <!-- End of body -->
 }

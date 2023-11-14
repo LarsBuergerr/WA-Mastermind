@@ -1,36 +1,104 @@
-@()
+@import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.Stone
+@import play.api.libs.json.{JsValue, JsObject}
 
-<head>
-  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/index.css")">
-</head>
+@(game_json: JsObject, currentStoneVector: Vector[Stone] ,error: String)
 
 @main("Mastermind Online") {
-  @()
 
-  <div class="header-container">
-    <img src="@routes.Assets.versioned("images/mastermind_header.png")"/>
-    
-    <div class="button-container">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/index.css")">
+  <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
 
-      <a href="@routes.HomeController.displayGame()">
-        <button class="button-new_game">
-          <span class="button-text">Play</span>
-        </button>
-      </a>
-      
-      <a href="@routes.HomeController.help()">
-        <button class="button-help">
-          <span class="button-text">Help</span>
-        </button>
-      </a>
-
-      <a href="@routes.HomeController.about()">
-        <button class="button-about">
-          <span class="button-text">About</span>
-        </button>
-      </a>
-
+  <!-- Body -->
+  <body>
+    <div class="stones">
+      <img src="@routes.Assets.versioned("images/stones/stone_win.png")" class="stone_win">
+      <img src="@routes.Assets.versioned("images/stones/stone_B.png")" class="stone_B">
+      <img src="@routes.Assets.versioned("images/stones/stone_G.png")" class="stone_G">
+      <img src="@routes.Assets.versioned("images/stones/stone_R.png")" class="stone_R">
+      <img src="@routes.Assets.versioned("images/stones/stone_Y.png")" class="stone_Y">
+      <img src="@routes.Assets.versioned("images/stones/stone_W.png")" class="stone_W">
+      <img src="@routes.Assets.versioned("images/stones/stone_P.png")" class="stone_P">
+      <h2 class="front_text">Can you guess the code?</h2>
     </div>
-    
-  </div>
+
+    <div class="game">
+      <div class="header-container">
+
+        <div class="top-bar">
+          <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="logo-img" width="600">
+        </div>
+
+        <div class="center" style="text-align: center;">
+            <div class="game-container">
+                <div class="game-box">
+                    <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">
+                        @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
+                            @if((row \ "row") == (game_json \ "turn")) {
+                                <div class="game-row">
+                                    @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
+                                        <img src="@routes.Assets.versioned("images/stones/stone_A.png")" class="stone-cell"
+                                        onmouseover="startChangeStone(this, @index)" onmouseout="stopChangeStone(this, @index)">
+                                    }
+                                </div>
+                            } else {
+                                <div class="game-row">
+                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell-locked><img/>
+                                    }
+                                </div>
+                            }
+                        }
+                    </h3>
+                </div>
+                <div class="hintstone-box">
+                    <h3 style="font-family: monospace; font-size: 22px; display: inline-block;">
+                        @for(row <- (game_json \ "hmatrix").as[List[JsValue]]) {
+                            <div class="game-row">
+                                @for(cell <- (row \ "cells").as[List[JsValue]]) {
+                                    <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
+                                }
+                            </div>
+                        }
+                    </h3>
+                </div>
+            </div>
+            <button class="placeStonesButton" onclick="placeStones()">Place Stones</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let text = document.querySelector(".front_text");
+      let stone_B = document.querySelector(".stone_B");
+      let stone_G = document.querySelector(".stone_G");
+      let stone_R = document.querySelector(".stone_R");
+      let stone_Y = document.querySelector(".stone_Y");
+      let stone_W = document.querySelector(".stone_W");
+      let stone_P = document.querySelector(".stone_P");
+      let stone_win = document.querySelector(".stone_win");
+
+      text_offset = parseFloat(getComputedStyle(text).marginTop);
+      stone_R_offset = parseFloat(getComputedStyle(stone_R).left);
+      stone_B_offset = parseFloat(getComputedStyle(stone_B).left);
+      stone_G_offset = parseFloat(getComputedStyle(stone_G).left);
+      stone_Y_offset = parseFloat(getComputedStyle(stone_Y).left);
+      stone_W_offset = parseFloat(getComputedStyle(stone_W).left);
+      stone_P_offset = parseFloat(getComputedStyle(stone_P).left);
+      stone_win_offset = parseFloat(getComputedStyle(stone_win).top);
+
+      window.addEventListener('scroll', () => {
+        let value = window.scrollY;
+        text.style.marginTop = text_offset + value * 2.5 + 'px';
+        stone_R.style.left = stone_R_offset - value * 0.6 + 'px';
+        stone_B.style.left = stone_B_offset - value * 0.2 + 'px';
+        stone_G.style.left = stone_G_offset + value * 0.1 + 'px';
+        stone_Y.style.left = stone_Y_offset - value * 0.3 + 'px';
+        stone_W.style.left = stone_W_offset + value * 1.2 + 'px';
+        stone_P.style.left = stone_P_offset + value * 0.4 + 'px';
+        stone_win.style.top = stone_win_offset - value * 0.3 + 'px';
+      });
+    </script>
+  </body>
 }

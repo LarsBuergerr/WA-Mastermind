@@ -1,87 +1,133 @@
-/* Apply a background color to the body */
-body {
-  background-color: rgb(41, 41, 41);
-  font-family: Arial, sans-serif;
-}
+@import "displayGame.css";
 
-/* Apply settings so image is centered */
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center; /* Center the content horizontally */
-  align-items: center; /* Center the content vertically */
-  height: 10vh; /* Adjust the height as needed */
-}
-
-.button-new_game {
-  background: url('/assets/images/stones/stone_R.png') no-repeat center;
-}
-
-.button-help {
-  background: url('/assets/images/stones/stone_P.png') no-repeat center;
-}
-
-.button-about {
-  background: url('/assets/images/stones/stone_B.png') no-repeat center;
-}
-
-.button-container a {
-  text-decoration: none; /* Remove underlining from the anchor tags */
-}
-
-.button-new_game,
-.button-help,
-.button-about {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border: 2px solid transparent;
-  background-size: contain;
-  transition: border-color 0.3s; /* Smooth color transition on hover */
+.stones {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10em;
-  margin-left: 3em;
+  position: relative;
+  overflow: hidden;
+  height: 150vh;
 }
 
-.button-new_game::before, 
-.button-help::before,
-.button-about::before{
-  content: '';
+.game {
   position: absolute;
-  top: -10%;
-  left: -10%;
-  width: 120%;
-  height: 120%;
-  border: 2px solid transparent;
-  transition: border-color 0.3s; /* Add a transition effect for border color change */
-  mix-blend-mode: screen; /* Set mix-blend-mode property */
-  filter: blur(15px); /* Add blur effect */
-  border-radius: 50%; /* Make the circle round */
+  width: 100%;
+  top: 100vh;
+  left: 0;
+  height: 95vh;
+  z-index: 4;
 }
 
-.button-new_game:hover::before ,
-.button-help:hover::before,
-.button-about:hover::before{
-  border-color: #ff7e5f; /* Set the glow color when hovering over the button */
-}
-
-.button-text {
-  font-size: 3em;
-  font-weight: bold;
+.front_text {
   text-align: center;
-  margin-top: 3.5em; /* Adjust the margin as needed */
-  text-decoration: none;
-  background: linear-gradient(to bottom, red, blue); /* Apply linear gradient to the text color */
-  -webkit-background-clip: text; /* Set the background clip to text for webkit browsers */
-  -webkit-text-fill-color: transparent; /* Set the text fill color to transparent for webkit browsers */
-  background-clip: text; /* Set the background clip to text for other browsers */
-  color: transparent; /* Set the text color to transparent for other browsers */
+  padding: 10px; /* Add padding to make the text more visible */
+  position: relative;
+  z-index: 2; /* Set a higher z-index value */
+  color: rgb(255, 255, 255);
+  font-size: 5em;
+  margin-top: -500px;
+}
+
+.stone_B {
+  position: absolute;
+  left: -15%;
+  top: -10%;
+  width: 30%;
+  filter: brightness(0.8);
+  overflow-x: hidden;
+}
+
+.stone_G {
+  position: absolute;
+  left: 80%;
+  top: -10%;
+  width: 35%;
+  filter: brightness(0.8);
+}
+
+.stone_R {
+  position: absolute;
+  left: -10%;
+  top: 25%;
+  width: 40%;
+  filter: brightness(0.9);
+}
+
+.stone_Y {
+  position: absolute;
+  left: 15%;
+  top: -50%;
+  width: 50%;
+  filter: brightness(0.7)
+}
+.stone_W {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 50%;
+  filter: brightness(0.5);
+}
+.stone_P {
+  position: absolute;
+  left: 80%;
+  top: 35%;
+  filter: brightness(0.9)
+}
+
+.stone_win {
+  position: absolute;
+  left: 20%;
+  top: 0;
+  width: 60%;
+ filter: brightness(0.3);
+}
+
+
+@media only screen and (max-width: 768px) {
+  .front_text {
+    font-size: 3em;
+    margin-top: -200px;
+  }
+
+  .stone_B,
+  .stone_G,
+  .stone_R,
+  .stone_Y,
+  .stone_W,
+  .stone_P,
+  .stone_win {
+    width: 100%;
+  }
+
+  .stones {
+    height: 100vh;
+  }
+
+  .stone_B,
+  .stone_G,
+  .stone_R,
+  .stone_Y,
+  .stone_W,
+  .stone_P,
+  .stone_win {
+    position: static;
+    margin: 0 auto;
+    filter: brightness(1);
+  }
+
+  .game {
+    top: 90vh;
+    height: auto;
+  }
+
+  .front_text {
+    margin-top: -200px;
+  }
+}
+
+/* Apply settings so image on mobile devices */
+@media (max-width: 1080px) {
+  .header-img {
+    margin-left: 2em;
+  }
 }

@@ -31,8 +31,20 @@ function startChangeStone(element, pos) {
         console.log(stoneArray);
     }
 
-    element.addEventListener("wheel", scrollHandler);
-    eventListeners[pos] = scrollHandler;
+    // Check if it's a touch device
+    if ('ontouchstart' in window) {
+        element.addEventListener('click', function() {
+            console.log("click triggered");
+            current_stone = possible_stones[(possible_stones.indexOf(current_stone) + 1) % possible_stones.length];
+            element.src = "/assets/images/stones/stone_" + current_stone + ".png";
+            stoneArray[pos] = current_stone;
+            console.log(stoneArray);
+        });
+    } else {
+        element.addEventListener('wheel', scrollHandler);
+    }
+    //element.addEventListener("wheel", scrollHandler);
+    //eventListeners[pos] = scrollHandler;
 }
 
 function stopChangeStone(element, pos) {
