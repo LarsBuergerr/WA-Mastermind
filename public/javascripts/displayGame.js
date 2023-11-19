@@ -1,6 +1,28 @@
 var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Add event listeners after the DOM has fully loaded
+    var stoneCells = document.querySelectorAll(".stone-cell");
+  
+    stoneCells.forEach(function (element, pos) {
+      element.addEventListener("mouseover", function () {
+        startChangeStone(element, pos);
+      });
+  
+      element.addEventListener("mouseout", function () {
+        stopChangeStone(element, pos);
+      });
+    });
+    // Place stones button click event
+    var placeStonesButton = document.querySelector(".placeStonesButton");
+    placeStonesButton.addEventListener("click", function () {
+      placeStones();
+    });
+  });
+
+
 function createErrorPopup(message) {
     var errorPopup = document.createElement("div");
     errorPopup.className = "error-popup";
