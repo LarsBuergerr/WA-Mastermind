@@ -13,13 +13,13 @@
   <!-- Body -->
   <body>
     <div class="stones">
-      <img src="@routes.Assets.versioned("images/stones/stone_win.png")" class="stone_win">
-      <img src="@routes.Assets.versioned("images/stones/stone_B.png")" class="stone_B">
-      <img src="@routes.Assets.versioned("images/stones/stone_G.png")" class="stone_G">
-      <img src="@routes.Assets.versioned("images/stones/stone_R.png")" class="stone_R">
-      <img src="@routes.Assets.versioned("images/stones/stone_Y.png")" class="stone_Y">
-      <img src="@routes.Assets.versioned("images/stones/stone_W.png")" class="stone_W">
-      <img src="@routes.Assets.versioned("images/stones/stone_P.png")" class="stone_P">
+      <img src="@routes.Assets.versioned("images/stones/stone_win.png")" class="stone_win round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_B.png")" class="stone_B round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_G.png")" class="stone_G round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_R.png")" class="stone_R round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_Y.png")" class="stone_Y round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_W.png")" class="stone_W round_image">
+      <img src="@routes.Assets.versioned("images/stones/stone_P.png")" class="stone_P round_image">
       <h2 class="front_text">Can you guess the code?</h2>
     </div>
 
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-
+    
     <script>
       let text = document.querySelector(".front_text");
       let stone_B = document.querySelector(".stone_B");
@@ -98,6 +98,9 @@
         stone_W.style.left = stone_W_offset + value * 1.2 + 'px';
         stone_P.style.left = stone_P_offset + value * 0.4 + 'px';
         stone_win.style.top = stone_win_offset - value * 0.3 + 'px';
+
+        let opacity = 1 - value / 450;
+        text.style.opacity = opacity < 0 ? 0 : opacity;
       });
     </script>
   </body>

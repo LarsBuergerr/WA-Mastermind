@@ -1,5 +1,6 @@
 @import "displayGame.css";
 
+
 .stones {
   display: flex;
   align-items: center;
@@ -7,6 +8,55 @@
   position: relative;
   overflow: hidden;
   height: 150vh;
+}
+
+.stones img {
+  filter: brightness(0.3);
+}
+
+.stones img:hover {
+  animation: glow 1s alternate, hover 1s alternate;
+  filter: brightness(0.7);
+  transform: translateY(-5px);
+}
+
+.stones img:not(:hover) {
+  animation: reset 1s ease-out; /* Add separate animation for smooth reset */
+}
+
+@keyframes reset {
+  0% {
+    filter: brightness(0.7);
+    transform: translateY(-5px);
+  }
+  100% {
+    filter: brightness(0.3);
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes glow {
+  0% {
+    filter: brightness(0.3);
+  }
+  100% {
+    filter: brightness(0.7); /* Adjust the brightness level for the glowing effect */
+  }
+}
+
+@keyframes hover {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+
+.round_image {
+  border-radius: 50%;
 }
 
 .game {
@@ -19,13 +69,34 @@
 }
 
 .front_text {
+  pointer-events: none;
+  font-family:'Courier New', Courier, monospace;
+  font-weight: bold;
   text-align: center;
   padding: 10px; /* Add padding to make the text more visible */
   position: relative;
   z-index: 2; /* Set a higher z-index value */
-  color: rgb(255, 255, 255);
-  font-size: 5em;
-  margin-top: -500px;
+  color: white;
+  font-size: 7em;
+  margin-top: -550px;
+  opacity: 1;
+  transition: text-shadow 1s ease-in;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to bottom, red, purple, blue);
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 0 0 10px rgba(128, 0, 128, 0.7), 0 0 10px rgba(0, 0, 255, 0.7); /* Set shadow colors for glow */
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7); /* Add white outline with 2px width */
+  animation: fade_in 2s ease-in;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .stone_B {
@@ -79,55 +150,30 @@
   left: 20%;
   top: 0;
   width: 60%;
- filter: brightness(0.3);
-}
-
-
-@media only screen and (max-width: 768px) {
-  .front_text {
-    font-size: 3em;
-    margin-top: -200px;
-  }
-
-  .stone_B,
-  .stone_G,
-  .stone_R,
-  .stone_Y,
-  .stone_W,
-  .stone_P,
-  .stone_win {
-    width: 100%;
-  }
-
-  .stones {
-    height: 100vh;
-  }
-
-  .stone_B,
-  .stone_G,
-  .stone_R,
-  .stone_Y,
-  .stone_W,
-  .stone_P,
-  .stone_win {
-    position: static;
-    margin: 0 auto;
-    filter: brightness(1);
-  }
-
-  .game {
-    top: 90vh;
-    height: auto;
-  }
-
-  .front_text {
-    margin-top: -200px;
-  }
+  filter: brightness(0.3);
 }
 
 /* Apply settings so image on mobile devices */
-@media (max-width: 1080px) {
-  .header-img {
-    margin-left: 2em;
+@media only screen and (max-width: 768) { 
+
+  .front_text {
+    font-size: 3em;
+    margin-top: -400px;
+  }
+
+  .stone_B,
+  .stone_G,
+  .stone_R,
+  .stone_Y,
+  .stone_W,
+  .stone_P {
+    display: none;
+  }
+
+  .stone_win {
+    top: 10%;
+    width: 180%;
+    left: -40%;
+    pointer-events: none;
   }
 }
