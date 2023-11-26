@@ -10,31 +10,30 @@ $(document).ready(function() {
     url: '/game/displayGame',
     type: 'GET',
     success: function(data) {
-        updateGameBox(data);
-      } 
-    }
-  );
+      updateGameField(data);
+    } 
+  });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Add event listeners after the DOM has fully loaded
-    var stoneCells = document.querySelectorAll(".stone-cell");
+  // Add event listeners after the DOM has fully loaded
+  var stoneCells = document.querySelectorAll(".stone-cell");
   
-    stoneCells.forEach(function (element, pos) {
-      element.addEventListener("mouseover", function () {
-        startChangeStone(element, pos);
-      });
-  
-      element.addEventListener("mouseout", function () {
-        stopChangeStone(element, pos);
-      });
+  stoneCells.forEach(function (element, pos) {
+    element.addEventListener("mouseover", function () {
+      startChangeStone(element, pos);
     });
-    // Place stones button click event
-    var placeStonesButton = document.querySelector(".placeStonesButton");
-    placeStonesButton.addEventListener("click", function () {
-      placeStones();
+
+    element.addEventListener("mouseout", function () {
+      stopChangeStone(element, pos);
     });
   });
+  // Place stones button click event
+  var placeStonesButton = document.querySelector(".placeStonesButton");
+  placeStonesButton.addEventListener("click", function () {
+    placeStones();
+  });
+});
 
 
 function createErrorPopup(message) {
@@ -95,40 +94,72 @@ function placeStones() {
         createErrorPopup("Please fill all stones before placing them!");
     } else {
         var stoneArrayString = stoneArray.join("");
-
         $.ajax({
             url: '/game/placeStones/' + stoneArrayString,
             type: 'GET',
             success: function(data) {
-                // Update the game box with the new data received from the server
-                updateGameBox(data);
+              console.log(data);
+              // Check data if game is over or not
+              if (data.status === "win") {
+                // If the game is won or lost, load the win page CSS
+                $('.header-image').fadeOut('slow', function() {
+                    $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
+                });
+
+                $('<link>')
+                    .appendTo('head')
+                    .attr({type : 'text/css', rel : 'stylesheet'})
+                    .attr('href', '/assets/stylesheets/displayWinPage.css');  
+
+                console.log("You won!");
+                renderWinGameField(data.game)
+
+                // Change the function of the "Place Stone" button to start a new game
+                $('#placeStonesButton').off('click').on('click', startNewGame);
+              } else if (data.status === "lose") {
+                console.log("You lost!");
+              } else {
+                updateGameField(data);
+              }
             }
         });
     }
 }
 
-function updateGameBox(data) {
-    // Update the turn and matrix rows
-    var currentTurn = data.turn;
+function startNewGame() {
+  $.ajax({
+    url: '/game/createGame',
+    type: 'GET',
+    success: function(data) {
+      console.log(data);
+      updateGameField(data);
+      // Change the function of the "Place Stone" button back to place stones
+      $('#placeStonesButton').off('click').on('click', placeStones);
+    }
+  });
+}
 
-    // Update matrix rows
-    var matrixRows = data.matrix.map(function (row) {
-        return row.cells.map(function (cell) {
-            if (row.row === currentTurn) {
+function updateGameField(data) {
+  // Update the turn and matrix rows
+  var currentTurn = data.turn;
 
-                return '<img src="/assets/images/stones/stone_A.png" class="stone-cell">';
-            } else {
-                return '<img src="/assets/images/stones/stone_' + cell.value + '.png" class="stone-cell-locked">';
-            }
-        }).join('');
-    });
+  // Update matrix rows
+  var matrixRows = data.matrix.map(function (row) {
+    return row.cells.map(function (cell) {
+      if (row.row === currentTurn) {
+        return '<img src="/assets/images/stones/stone_A.png" class="stone-cell">';
+      } else {
+        return '<img src="/assets/images/stones/stone_' + cell.value + '.png" class="stone-cell-locked">';
+      }
+    }).join('');
+  });
 
-    // Update hintstone rows
-    var hintstoneRows = data.hmatrix.map(function (row) {
-        return row.cells.map(function (cell) {
-            return '<img src="/assets/images/hintstones/hstone_' + cell.value + '.png" class="hintstone-cell">';
-        }).join('');
-    });
+  // Update hint stone rows
+  var hintstoneRows = data.hmatrix.map(function (row) {
+      return row.cells.map(function (cell) {
+          return '<img src="/assets/images/hintstones/hstone_' + cell.value + '.png" class="hintstone-cell">';
+      }).join('');
+  });
 
     // Update the game box HTML
     $('.game-box').html('');
