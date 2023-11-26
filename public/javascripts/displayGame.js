@@ -82,7 +82,18 @@ function placeStones() {
     } else {
         var stoneArrayString = stoneArray.join("");
 
-        // Route to /game/placeStones/:stones
-        window.location.href = "/game/placeStones/" + stoneArrayString;
+        // Send an AJAX request to /game/placeStones/:stones
+        $.ajax({
+            url: '/game/placeStones/' + stoneArrayString,
+            type: 'POST',
+            success: function(data) {
+                // Update the stones on the page with the data received from the server
+                for (var i = 0; i < data.stones.length; i++) {
+                    var stone = data.stones[i];
+                    var element = document.getElementById('stone' + i);
+                    element.src = "/assets/images/stones/stone_" + stone + ".png";
+                }
+            }
+        });
     }
 }

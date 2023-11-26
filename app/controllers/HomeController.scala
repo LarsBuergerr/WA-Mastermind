@@ -7,6 +7,8 @@ import play.api.mvc._
 import java.lang.ProcessBuilder.Redirect
 import de.htwg.se.mastermind.controller.ControllerComponent.ControllerBaseImpl._
 import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.{Stone, HStone, HintStone}
+import play.api.libs.json._
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -48,22 +50,34 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))  
   }
 
+  /*
+   * Implicit Writes for the Stone class
+   */
+  implicit val stoneWrites = new Writes[Stone] {
+    def writes(stone: Stone) = Json.toJson(stone.stringRepresentation)
+  }
+
+  implicit val vectorStoneWrites = new Writes[Vector[Stone]] {
+    def writes(vectorStone: Vector[Stone]) = Json.toJson(vectorStone.map(_.stringRepresentation))
+  }
+
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
     val chars = stones.toCharArray()
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
 
-    print(controller.game.getCode())
+    // Enable to see the code
+    // print(controller.game.getCode())
     //reset currentStoneVector to only empty stones
     controller.currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller.game.field.matrix.cols)(Stone("E")))
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
 
     if(hints.forall(p => p.stringRepresentation.equals("R"))) {
-      Ok(views.html.displayWinPage(controller.gameToJson, controller.currentStoneVector, ""))
+      Ok(Json.toJson(Map("status" -> "win", "stones" -> controller.currentStoneVector)))
     } else if(controller.game.getRemainingTurns().equals(0)) {
-      Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
+      Ok(Json.toJson(Map("status" -> "lose", "stones" -> controller.currentStoneVector)))
     } else {
-      Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+      Ok(Json.toJson(Map("status" -> "continue", "stones" -> controller.currentStoneVector)))
     }
   }
 
