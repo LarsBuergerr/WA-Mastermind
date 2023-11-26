@@ -8,20 +8,10 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
   <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/index.css")">
+
+  <!-- Scripts -->
   <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
 
-  <script>
-    $(document).ready(function() {
-    $.ajax({
-        url: '/game/displayGame', // Replace with the URL that returns the game data
-        type: 'GET',
-        success: function(data) {
-              updateGameBox(data);
-              } 
-            }
-        );
-    });
-  </script>
   <!-- Body -->
   <body>
     <div class="stones">
@@ -35,20 +25,22 @@
       <h2 class="front_text">Can you guess the code?</h2>
     </div>
     <script type=text/javascript src="@routes.Assets.versioned("javascripts/index.js")"></script>
-
+    
     <div class="game">
       <div class="header-container">
-
-        <div class="top-bar">
+        <div class="top-bar"> 
           <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="logo-img" width="600">
         </div>
-
         <div class="center" style="text-align: center;">
             <div class="game-container">
                 <!-- Game box (stones) -->
-                <div class="game-box"></div>  <!-- End of game-box -->
+                <div class="game-box">
+                  <!-- Will be rendered by javascript -->
+                </div>
                 <!-- Hintstone box -->
-                <div class="hintstone-box"></div>  <!-- End of hintstone-box -->
+                <div class="hintstone-box">
+                  <!-- Will be rendered by javascript -->
+                </div>
             </div>    <!-- End of game-container -->
             <button class="placeStonesButton">Place Stones</button>
         </div>

@@ -1,16 +1,19 @@
 var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
-
+/*
+  * This function is called when the page is loaded.
+  * It sends an AJAX request to the server to get the game data.
+  */
 $(document).ready(function() {
-    $.ajax({
-        url: '/game/displayGame', // Replace with the URL that returns the game data
-        type: 'GET',
-        success: function(data) {
-              updateGameBox(data);
-            } 
-        }
-    );
+  $.ajax({
+    url: '/game/displayGame',
+    type: 'GET',
+    success: function(data) {
+        updateGameBox(data);
+      } 
+    }
+  );
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -85,36 +88,6 @@ function stopChangeStone(element, pos) {
         element.removeEventListener("wheel", eventListeners[pos]);
     }
 }
-
-// function placeStones() {
-//     if (stoneArray.includes("E")) {
-//         // Check if there are still empty stones in the array
-//         createErrorPopup("Please fill all stones before placing them!");
-//     } else {
-//         var stoneArrayString = stoneArray.join("");
-
-//         // Send an AJAX request to /game/placeStones/:stones
-//         $.ajax({
-//             url: '/game/placeStones/' + stoneArrayString,
-//             type: 'GET',
-//             success: function(data) {
-//                 console.log(data);
-//                 // Update the stones on the page with the data received from the server
-//                 var current_turn = data.turn;
-
-//                 // matrix row at index of current turn
-//                 var matrix_row = data.matrix[current_turn - 1];
-//                 console.log(matrix_row);
-
-//                 for (var i = 0; i < 4; i++) {
-//                     var stone = document.querySelector(".stone-cell");
-//                     stone.src = "/assets/images/stones/stone_" + matrix_row.cells[i].value + ".png";
-//                 }
-//             }
-//         });
-//     }
-// }
-
 
 function placeStones() {
     if (stoneArray.includes("E")) {
