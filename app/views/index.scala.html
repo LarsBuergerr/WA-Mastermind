@@ -10,6 +10,18 @@
   <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/index.css")">
   <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
 
+  <script>
+    $(document).ready(function() {
+    $.ajax({
+        url: '/game/displayGame', // Replace with the URL that returns the game data
+        type: 'GET',
+        success: function(data) {
+              updateGameBox(data);
+              } 
+            }
+        );
+    });
+  </script>
   <!-- Body -->
   <body>
     <div class="stones">

@@ -1,6 +1,7 @@
 var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
+
 $(document).ready(function() {
     $.ajax({
         url: '/game/displayGame', // Replace with the URL that returns the game data
@@ -11,7 +12,6 @@ $(document).ready(function() {
         }
     );
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners after the DOM has fully loaded

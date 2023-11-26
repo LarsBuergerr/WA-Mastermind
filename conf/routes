@@ -27,8 +27,6 @@ GET     /game/displayLosePage       controllers.HomeController.displayLosePage()
 
 GET     /game/placeStones/:stones   controllers.HomeController.placeStones(stones: String)
 
-GET     /game/placeStone/:stone     controllers.HomeController.placeStone(stone: String, pos: Int)
-
 # ERROR routing
 GET     /errors/notfound            controllers.HomeController.notFound()
 GET     /errors/badrequest/         controllers.HomeController.badRequest(message: String)
