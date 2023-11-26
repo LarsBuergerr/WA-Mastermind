@@ -54,11 +54,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * Implicit Writes for the Stone class
    */
   implicit val stoneWrites = new Writes[Stone] {
-    def writes(stone: Stone) = Json.toJson(stone.stringRepresentation)
+    def writes(stone: Stone) = Json.obj(
+      "stone" -> stone.stringRepresentation
+    )
   }
 
   implicit val vectorStoneWrites = new Writes[Vector[Stone]] {
-    def writes(vectorStone: Vector[Stone]) = Json.toJson(vectorStone.map(_.stringRepresentation))
+    def writes(vectorStone: Vector[Stone]) = Json.obj(
+      "stones" -> vectorStone.map(_.stringRepresentation)
+    )
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
@@ -73,11 +77,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
 
     if(hints.forall(p => p.stringRepresentation.equals("R"))) {
-      Ok(Json.toJson(Map("status" -> "win", "stones" -> controller.currentStoneVector)))
+      Ok(Json.obj("status" -> "win", "stones" -> controller.currentStoneVector.map(_.stringRepresentation)))
     } else if(controller.game.getRemainingTurns().equals(0)) {
-      Ok(Json.toJson(Map("status" -> "lose", "stones" -> controller.currentStoneVector)))
+      Ok(Json.obj("status" -> "lose", "stones" -> controller.currentStoneVector.map(_.stringRepresentation)))
     } else {
-      Ok(Json.toJson(Map("status" -> "continue", "stones" -> controller.currentStoneVector)))
+      Ok(Json.obj("status" -> "continue", "stones" -> controller.currentStoneVector.map(_.stringRepresentation)))
     }
   }
 
