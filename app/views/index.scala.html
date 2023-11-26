@@ -33,37 +33,11 @@
 
         <div class="center" style="text-align: center;">
             <div class="game-container">
-                <div class="game-box">
-                    <h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "matrix").as[List[JsValue]]) {       
-                            @if((row \ "row") == (game_json \ "turn")) {
-                                <div class="game-row">
-                                    @for((cell, index) <- (row \ "cells").as[List[JsValue]].zipWithIndex) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_A.png")" class="stone-cell">
-                                    }
-                                </div>
-                            } else {
-                                <div class="game-row">
-                                    @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                        <img src="@routes.Assets.versioned("images/stones/stone_" + cell("value").as[String] + ".png")" class=stone-cell-locked><img/>
-                                    }
-                                </div>
-                            }
-                        }
-                    </h3>
-                </div>
-                <div class="hintstone-box">
-                    <h3 style="font-family: monospace; font-size: 22px; display: inline-block;">
-                        @for(row <- (game_json \ "hmatrix").as[List[JsValue]]) {
-                            <div class="game-row">
-                                @for(cell <- (row \ "cells").as[List[JsValue]]) {
-                                    <img src="@routes.Assets.versioned("images/hintstones/hstone_" + cell("value").as[String] + ".png")" class=hintstone-cell><img/>
-                                }
-                            </div>
-                        }
-                    </h3>
-                </div>
-            </div>
+                <!-- Game box (stones) -->
+                <div class="game-box"></div>  <!-- End of game-box -->
+                <!-- Hintstone box -->
+                <div class="hintstone-box"></div>  <!-- End of hintstone-box -->
+            </div>    <!-- End of game-container -->
             <button class="placeStonesButton">Place Stones</button>
         </div>
       </div>

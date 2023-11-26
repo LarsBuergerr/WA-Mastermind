@@ -1,6 +1,17 @@
 var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
+$(document).ready(function() {
+    $.ajax({
+        url: '/game/displayGame', // Replace with the URL that returns the game data
+        type: 'GET',
+        success: function(data) {
+              updateGameBox(data);
+            } 
+        }
+    );
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners after the DOM has fully loaded
@@ -75,6 +86,36 @@ function stopChangeStone(element, pos) {
     }
 }
 
+// function placeStones() {
+//     if (stoneArray.includes("E")) {
+//         // Check if there are still empty stones in the array
+//         createErrorPopup("Please fill all stones before placing them!");
+//     } else {
+//         var stoneArrayString = stoneArray.join("");
+
+//         // Send an AJAX request to /game/placeStones/:stones
+//         $.ajax({
+//             url: '/game/placeStones/' + stoneArrayString,
+//             type: 'GET',
+//             success: function(data) {
+//                 console.log(data);
+//                 // Update the stones on the page with the data received from the server
+//                 var current_turn = data.turn;
+
+//                 // matrix row at index of current turn
+//                 var matrix_row = data.matrix[current_turn - 1];
+//                 console.log(matrix_row);
+
+//                 for (var i = 0; i < 4; i++) {
+//                     var stone = document.querySelector(".stone-cell");
+//                     stone.src = "/assets/images/stones/stone_" + matrix_row.cells[i].value + ".png";
+//                 }
+//             }
+//         });
+//     }
+// }
+
+
 function placeStones() {
     if (stoneArray.includes("E")) {
         // Check if there are still empty stones in the array
@@ -82,18 +123,74 @@ function placeStones() {
     } else {
         var stoneArrayString = stoneArray.join("");
 
-        // Send an AJAX request to /game/placeStones/:stones
         $.ajax({
             url: '/game/placeStones/' + stoneArrayString,
-            type: 'POST',
+            type: 'GET',
             success: function(data) {
-                // Update the stones on the page with the data received from the server
-                for (var i = 0; i < data.stones.length; i++) {
-                    var stone = data.stones[i];
-                    var element = document.getElementById('stone' + i);
-                    element.src = "/assets/images/stones/stone_" + stone + ".png";
-                }
+                // Update the game box with the new data received from the server
+                updateGameBox(data);
             }
         });
     }
+}
+
+function updateGameBox(data) {
+    // Update the turn and matrix rows
+    var currentTurn = data.turn;
+
+    // Update matrix rows
+    var matrixRows = data.matrix.map(function (row) {
+        return row.cells.map(function (cell) {
+            if (row.row === currentTurn) {
+
+                return '<img src="/assets/images/stones/stone_A.png" class="stone-cell">';
+            } else {
+                return '<img src="/assets/images/stones/stone_' + cell.value + '.png" class="stone-cell-locked">';
+            }
+        }).join('');
+    });
+
+    // Update hintstone rows
+    var hintstoneRows = data.hmatrix.map(function (row) {
+        return row.cells.map(function (cell) {
+            return '<img src="/assets/images/hintstones/hstone_' + cell.value + '.png" class="hintstone-cell">';
+        }).join('');
+    });
+
+    // Update the game box HTML
+    $('.game-box').html('');
+    $('.game-box').append('<h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">');
+
+    for (var i = 0; i < matrixRows.length; i++) {
+        if (i === currentTurn) {
+            $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
+        } else {
+            $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
+        }
+    }
+
+    $('.game-box').append('</h3>');
+
+    // Update the hintstone box HTML
+    $('.hintstone-box').html('');
+    $('.hintstone-box').append('<h3 style="font-family: monospace; font-size: 22px; display: inline-block;">');
+
+    for (var j = 0; j < hintstoneRows.length; j++) {
+        $('.hintstone-box h3').append('<div class="game-row">' + hintstoneRows[j] + '</div>');
+    }
+
+    $('.hintstone-box').append('</h3>');
+
+    // add event listeners to the stones
+    var stoneCells = document.querySelectorAll(".stone-cell");
+
+    stoneCells.forEach(function (element, pos) {
+        element.addEventListener("mouseover", function () {
+            startChangeStone(element, pos);
+        });
+
+        element.addEventListener("mouseout", function () {
+            stopChangeStone(element, pos);
+        });
+    });
 }

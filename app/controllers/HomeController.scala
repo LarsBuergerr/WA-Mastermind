@@ -34,7 +34,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+    Ok(controller.fileIO.gameToJson(controller.game))
   }
 
   def displayWinPage() = Action { implicit request: Request[AnyContent] =>
@@ -81,7 +81,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     } else if(controller.game.getRemainingTurns().equals(0)) {
       Ok(Json.obj("status" -> "lose", "stones" -> controller.currentStoneVector.map(_.stringRepresentation)))
     } else {
-      Ok(Json.obj("status" -> "continue", "stones" -> controller.currentStoneVector.map(_.stringRepresentation)))
+      Ok(controller.fileIO.gameToJson(controller.game))
     }
   }
 
