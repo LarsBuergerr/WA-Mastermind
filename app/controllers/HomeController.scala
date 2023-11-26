@@ -29,18 +29,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
+    print("createGame")
     controller = new Controller()
-    Ok(views.html.index(controller.gameToJson, controller.currentStoneVector, ""))
+    Ok(controller.fileIO.gameToJson(controller.game))
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
     Ok(controller.fileIO.gameToJson(controller.game))
   }
-
-  def displayLosePage() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
-  }
-
 
   /*
    * Implicit Writes for the Stone class

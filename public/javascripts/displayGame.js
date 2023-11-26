@@ -1,7 +1,10 @@
 var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
-/*
+// Add a global variable to keep track of the game state
+var gameInProgress = true;
+
+/**
   * This function is called when the page is loaded.
   * It sends an AJAX request to the server to get the game data.
   */
@@ -15,6 +18,10 @@ $(document).ready(function() {
   });
 });
 
+/**
+ * This function is called when the DOM has fully loaded.
+ * It adds event listeners to the stone cells and the place stones button.
+ */
 document.addEventListener("DOMContentLoaded", function () {
   // Add event listeners after the DOM has fully loaded
   var stoneCells = document.querySelectorAll(".stone-cell");
@@ -31,28 +38,31 @@ document.addEventListener("DOMContentLoaded", function () {
   // Place stones button click event
   var placeStonesButton = document.querySelector(".placeStonesButton");
   placeStonesButton.addEventListener("click", function () {
-    placeStones();
+    // Only call placeStones if the game is in progress
+    if (gameInProgress) {
+      placeStones();
+    }
   });
 });
 
 
 function createErrorPopup(message) {
-    var errorPopup = document.createElement("div");
-    errorPopup.className = "error-popup";
-    errorPopup.innerHTML = message;
-    document.body.appendChild(errorPopup);
+  var errorPopup = document.createElement("div");
+  errorPopup.className = "error-popup";
+  errorPopup.innerHTML = message;
+  document.body.appendChild(errorPopup);
 
+  setTimeout(function () {
+    errorPopup.style.opacity = 0;
     setTimeout(function () {
-        errorPopup.style.opacity = 0;
-        setTimeout(function () {
-            errorPopup.remove();
-            }, 1000);
-        }, 3000); // 3000 milliseconds (3 seconds) until it disappears
+        errorPopup.remove();
+        }, 1000);
+    }, 3000); // 3000 milliseconds (3 seconds) until it disappears
 }
 
 function startChangeStone(element, pos) {
-    var possible_stones = ["R", "G", "B", "Y", "P", "W"];
-    var current_stone = element.src.split("_")[1].split(".")[0];
+  var possible_stones = ["R", "G", "B", "Y", "P", "W"];
+  var current_stone = element.src.split("_")[1].split(".")[0];
 
     function scrollHandler(event) {
         event.preventDefault();
@@ -83,63 +93,82 @@ function startChangeStone(element, pos) {
 }
 
 function stopChangeStone(element, pos) {
-    if (eventListeners[pos]) {
-        element.removeEventListener("wheel", eventListeners[pos]);
-    }
+  if (eventListeners[pos]) {
+    element.removeEventListener("wheel", eventListeners[pos]);
+  }
 }
 
 function placeStones() {
-    if (stoneArray.includes("E")) {
-        // Check if there are still empty stones in the array
-        createErrorPopup("Please fill all stones before placing them!");
-    } else {
-        var stoneArrayString = stoneArray.join("");
-        $.ajax({
-            url: '/game/placeStones/' + stoneArrayString,
-            type: 'GET',
-            success: function(data) {
-              console.log(data);
-              // Check data if game is over or not
-              if (data.status === "win") {
-                // If the game is won or lost, load the win page CSS
-                $('.header-image').fadeOut('slow', function() {
-                    $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
-                });
-
-                $('<link>')
-                    .appendTo('head')
-                    .attr({type : 'text/css', rel : 'stylesheet'})
-                    .attr('href', '/assets/stylesheets/displayWinPage.css');  
-
-                console.log("You won!");
-                renderWinGameField(data.game)
-
-                // Change the function of the "Place Stone" button to start a new game
-                $('#placeStonesButton').off('click').on('click', startNewGame);
-              } else if (data.status === "lose") {
-                console.log("You lost!");
-              } else {
-                updateGameField(data);
-              }
-            }
-        });
-    }
+  if (stoneArray.includes("E")) {
+    // Check if there are still empty stones in the array
+    createErrorPopup("Please fill all stones before placing them!");
+  } else {
+    var stoneArrayString = stoneArray.join("");
+    $.ajax({
+      url: '/game/placeStones/' + stoneArrayString,
+      type: 'GET',
+      success: function(data) {
+        console.log(data);
+        // Check data if game is over or not
+        if (data.status === "win") {  // ----- WIN GAME -----
+          $('.header-image').fadeOut('slow', function() {
+            $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
+          });
+          $('<link>')
+              .appendTo('head')
+              .attr({type : 'text/css', rel : 'stylesheet'})
+                .attr('href', '/assets/stylesheets/displayWinPage.css');  
+          console.log("You won!");
+          renderWinGameField(data.game)
+          // Change the function of the "Place Stone" button to start a new game
+          $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
+          gameInProgress = false;
+        } else if (data.status === "lose") {  // ----- LOSE GAME -----
+          $('.header-image').fadeOut('slow', function() {
+            $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
+          });
+          $('<link>')
+              .appendTo('head')
+              .attr({type : 'text/css', rel : 'stylesheet'})
+                .attr('href', '/assets/stylesheets/displayLoosePage.css');  
+          console.log("You lost!");
+          renderLooseGameField(data.game)
+          // Change the function of the "Place Stone" button to start a new game
+          $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
+          gameInProgress = false;
+        } else {  // ----- GAME CONTINUES -----
+          updateGameField(data);
+        }
+      }
+    });
+  }
 }
 
+/**
+ * This function is called when the "Start New Game" button is clicked
+ * which is only displayed when a game is over.
+ */
 function startNewGame() {
   $.ajax({
     url: '/game/createGame',
     type: 'GET',
     success: function(data) {
       console.log(data);
+      currentTurn = 0;
       updateGameField(data);
+      // Change the header image back to the original
+      $('.header-image').fadeOut('slow', function() {
+        $(this).attr('src', '/assets/images/mastermind_header_cropped.png').fadeIn('slow');
+      });
       // Change the function of the "Place Stone" button back to place stones
-      $('#placeStonesButton').off('click').on('click', placeStones);
+      $('.placeStonesButton').off('click').on('click', placeStones).text('Place Stones');
+      gameInProgress = true;
     }
   });
 }
 
 function updateGameField(data) {
+
   // Update the turn and matrix rows
   var currentTurn = data.turn;
 

@@ -1,8 +1,4 @@
-/**
-  * This file contains the functions that display the win game field
-  */
-
-function renderWinGameField(gameData) {
+function renderLooseGameField(gameData) {
   // Clear the current game field
   $('.game-box').empty();
   $('.hintstone-box').empty();
@@ -15,14 +11,14 @@ function renderWinGameField(gameData) {
     // Create the specified number of cells in each row
     row.cells.forEach(function() {
       var $cell = $('<img>').addClass('stone-cell-locked');
-      $cell.attr('src', '/assets/images/stones/stone_win.png');
+      $cell.attr('src', '/assets/images/stones/stone_R.png');
       $row.append($cell);
     });
 
     // Create the specified number of hintstones in each row
     gameData.hmatrix[index].cells.forEach(function() {
       var $hintstone = $('<img>').addClass('hintstone-cell');
-      $hintstone.attr('src', '/assets/images/hintstones/hstone_R.png');
+      $hintstone.attr('src', '/assets/images/hintstones/hstone_E.png');
       $hintstoneRow.append($hintstone);
     });
 
