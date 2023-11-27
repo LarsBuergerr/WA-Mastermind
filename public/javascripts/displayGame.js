@@ -114,10 +114,6 @@ function placeStones() {
           $('.header-image').fadeOut('slow', function() {
             $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
           });
-          $('<link>')
-              .appendTo('head')
-              .attr({type : 'text/css', rel : 'stylesheet'})
-                .attr('href', '/assets/stylesheets/displayWinPage.css');  
           console.log("You won!");
           renderWinGameField(data.game)
           // Change the function of the "Place Stone" button to start a new game
@@ -161,7 +157,7 @@ function startNewGame() {
         $(this).attr('src', '/assets/images/mastermind_header_cropped.png').fadeIn('slow');
       });
       // Change the function of the "Place Stone" button back to place stones
-      $('.placeStonesButton').off('click').on('click', placeStones).text('Place Stones');
+      $('.placeStonesButton').off('click').text('Place Stones');
       gameInProgress = true;
     }
   });
