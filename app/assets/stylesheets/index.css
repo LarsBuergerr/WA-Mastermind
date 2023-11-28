@@ -10,6 +10,29 @@
   height: 150vh;
 }
 
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translate3d(-50%, -60%, 0);
+  }
+  40% {
+    transform: translate3d(-50%, -50%, 0);
+  }
+  60% {
+    transform: translate3d(-50%, -45%, 0);
+  }
+}
+
+.arrow {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  height: 30%;
+  pointer-events: none; /* Disable mouse events on the arrow */
+  z-index: 3; /* Set a higher z-index value */
+  animation: fade_in 2s ease-in, bounce 2s infinite; /* Add fade-in and bounce animation */
+}
+
 .header-image{
   max-height: 100%;
 }
