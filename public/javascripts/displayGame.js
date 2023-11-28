@@ -2,7 +2,6 @@ var stoneArray = ["E", "E", "E", "E"];
 var eventListeners = []; // Store event listeners
 
 // Add a global variable to keep track of the game state
-var gameInProgress = true;
 
 /**
   * This function is called when the page is loaded.
@@ -38,10 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Place stones button click event
   var placeStonesButton = document.querySelector(".placeStonesButton");
   placeStonesButton.addEventListener("click", function () {
-    // Only call placeStones if the game is in progress
-    if (gameInProgress) {
-      placeStones();
-    }
+    placeStones();
   });
 });
 
@@ -118,7 +114,6 @@ function placeStones() {
           renderWinGameField(data.game)
           // Change the function of the "Place Stone" button to start a new game
           $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
-          gameInProgress = false;
         } else if (data.status === "lose") {  // ----- LOSE GAME -----
           $('.header-image').fadeOut('slow', function() {
             $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
@@ -131,7 +126,7 @@ function placeStones() {
           renderLooseGameField(data.game)
           // Change the function of the "Place Stone" button to start a new game
           $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
-          gameInProgress = false;
+          //ameInProgress = false;
         } else {  // ----- GAME CONTINUES -----
           updateGameField(data);
         }
@@ -158,7 +153,6 @@ function startNewGame() {
       });
       // Change the function of the "Place Stone" button back to place stones
       $('.placeStonesButton').off('click').text('Place Stones');
-      gameInProgress = true;
     }
   });
 }

@@ -10,6 +10,10 @@
   height: 150vh;
 }
 
+.header-image{
+  max-height: 100%;
+}
+
 .stones img {
   filter: brightness(0.3);
 }
@@ -70,7 +74,7 @@
 
 .front_text {
   pointer-events: none;
-  font-family:'Courier New', Courier, monospace;
+  font-family:'Roboto', sans-serif;
   font-weight: bold;
   text-align: center;
   padding: 10px; /* Add padding to make the text more visible */
@@ -84,8 +88,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  background-image: linear-gradient(to bottom, red, purple, blue);
-  text-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 0 0 10px rgba(128, 0, 128, 0.7), 0 0 10px rgba(0, 0, 255, 0.7); /* Set shadow colors for glow */
+  background-image: linear-gradient(to bottom, red, blue);
   -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7); /* Add white outline with 2px width */
   animation: fade_in 2s ease-in;
 }
