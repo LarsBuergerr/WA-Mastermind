@@ -25,6 +25,7 @@ import de.htwg.se.mastermind.model.FileIOComponent.fileIOjsonImpl.FileIO
 class HomeController @Inject()(val controllerComponents: ControllerComponents)(implicit system: ActorSystem, mat: Materializer) extends BaseController {
 
   var status = "continue"
+  var current_turn = "player1"
 
   var code = new Code(4)
   var game = Game(new Field(10, 4, Stone("E"), HintStone("E")), code, 0)
@@ -85,6 +86,13 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
   }
 
   def placeStonesMultiplayer(hash: String, stones: String) = Action { implicit request: Request[AnyContent] =>
+    // switch turn to other player
+    if (current_turn.equals("player1")) {
+      current_turn = "player2"
+    } else {
+      current_turn = "player1"
+    }
+
     val chars = stones.toCharArray()
     val stoneVector = controller_map(hash).game.buildVector(Vector[Stone](), chars)
     val hints = controller_map(hash).game.getCode().compareTo(stoneVector)
@@ -193,12 +201,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
         for (client <- client_map(hash)) {
           println("refreshed")
           println(client_map(hash).length)
-          client ! Json.obj("status" -> status, "game" -> controller_map(hash).gameToJson).toString()
+          client ! Json.obj("current_turn" -> current_turn, "status" -> status, "game" -> controller_map(hash).gameToJson).toString()
         }
       }
       case msg: JsObject =>
         println("ws: " + msg + " for game: " + hash)
-        out ! Json.obj("status" -> status, "game" -> controller_map(hash).gameToJson).toString()
+        out ! Json.obj("current_turn" -> current_turn, "status" -> status, "game" -> controller_map(hash).gameToJson).toString()
     }
   }
 

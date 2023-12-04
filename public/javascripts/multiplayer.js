@@ -1,22 +1,17 @@
 let socket;
 
-function startup() {
-  window.onload = async () => {
-    await webSocketInit();
+window.onload = async () => {
+  await webSocketInit();
 
-    // check if player 2 when yes send start game to server
-    if(getCookie("pn") === "player2") {
-      console.log("start game");
-      gameChanges("/game_multiplayer/getGame/"+getCookie("game"));
-    } else {
-      // route to waiting page
-      console.log("waiting for player 2");
-      let hash = getCookie("game");
-      console.log("Hash: ", hash);
-      if (window.location.pathname !== "/game_multiplayer/multiplayerWaiting/" + hash) {
-        window.location.href = "/game_multiplayer/multiplayerWaiting/" + hash;
-      }
-    }
+  // check if player 2 when yes send start game to server
+  if(getCookie("pn") === "player2") {
+    console.log("start game");
+    console.log(socket);
+    gameChanges("/game_multiplayer/getGame/"+getCookie("game"));
+  } else {
+    // route to waiting page
+    console.log("waiting for player 2");
+    showWaitingForJoinDiv(getCookie("game"));
   }
 }
 
@@ -32,10 +27,16 @@ function webSocketInit() {
             if(event.data === "Keep alive"){
                 console.log("ping")
             }else{
-                console.log("json reloaded");
-                console.log(JSON.parse(event.data));
-                
-                checkStatusAndUpdate(JSON.parse(event.data).game);
+                data = JSON.parse(event.data)
+
+                checkStatusAndUpdate(data.game);
+                console.log(data.current_turn);
+                if(data.current_turn !== getCookie("pn")) {
+                  console.log("your turn")
+                  showWaitingForTurnDiv();
+                } else {
+                  removeWaitingForTurnDiv();
+                }
             }
         } else {
             console.log("no valid json data");
@@ -163,7 +164,7 @@ function checkStatusAndUpdate(data) {
   console.log(data.matrix);
   console.log(data.hmatrix);
   // check if every hintstone is red in the last row
-  if (data.hmatrix[data.turn].cells.every((hintstone) => hintstone.value === "R")) {  // ----- WIN GAME -----
+  if (data.status === "win") {  // ----- WIN GAME -----
     $('.header-image').fadeOut('slow', function() {
       $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
     });
@@ -171,7 +172,7 @@ function checkStatusAndUpdate(data) {
     renderWinGameField(data.game)
     // Change the function of the "Place Stone" button to start a new game
     $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
-  } else if (data.turn == data.matrix.length - 1) {  // ----- LOSE GAME -----
+  } else if (data.status === "lose") {  // ----- LOSE GAME -----
     $('.header-image').fadeOut('slow', function() {
       $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
     });
@@ -272,4 +273,35 @@ function updateGameField(data) {
             stopChangeStone(element, pos);
         });
     });
+}
+
+function showWaitingForJoinDiv(gameToken) {
+  // Create the overlay and hover-div elements
+  var overlay = $('<div class="overlay"></div>');
+  var hoverDiv = $('<div class="hover-div"><h1>Waiting for other player to join: </h1></div>');
+
+  // Create a clickable box with the game token
+  var tokenBox = $('<div class="token-box" onclick="copyToClipboard(\'' + gameToken + '\')">Copy token to clipboard!</div>');
+
+  // Append the elements to the body
+  $('body').append(overlay.append(hoverDiv.append(tokenBox)));
+}
+
+// Function to copy the game token to the clipboard
+function copyToClipboard(text) {
+  var textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
+function showWaitingForTurnDiv() {
+  $('body').append('<div class="overlay"><div class="hover-div"><h1>Waiting for other player</h1></div></div>');
+}
+
+
+function removeWaitingForTurnDiv() {
+  $('.overlay').remove();
 }
