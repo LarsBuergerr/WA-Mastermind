@@ -19,7 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-    
+    <!-- AJAX -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
   </head> <!-- End of head -->
@@ -43,6 +43,18 @@
               <a class="nav-link text-dark" href="@routes.HomeController.index()">
                 <img src="@routes.Assets.versioned("images/hintstones/hstone_R.png")" class="nav-icon">
                 Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="@routes.HomeController.help()">
+                <img src="@routes.Assets.versioned("images/stones/stone_R.png")" class="nav-icon">
+                Create Multiplayer
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="@routes.HomeController.joinMultiplayer()">
+                <img src="@routes.Assets.versioned("images/stones/stone_W.png")" class="nav-icon">
+                Join Multiplayer
               </a>
             </li>
             <li class="nav-item">

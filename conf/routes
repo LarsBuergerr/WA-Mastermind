@@ -21,6 +21,8 @@ GET     /game/createGame            controllers.HomeController.createGame()
 
 GET     /game/displayGame           controllers.HomeController.displayGame()
 
+GET     /game/joinMultiplayer       controllers.HomeController.joinMultiplayer()
+
 GET     /game/placeStones/:stones   controllers.HomeController.placeStones(stones: String)
 
 # ERROR routing

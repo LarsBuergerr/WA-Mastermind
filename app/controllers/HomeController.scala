@@ -28,6 +28,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
+  def joinMultiplayer() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.joinMultiplayer())
+  }
+
   def createGame() = Action { implicit request: Request[AnyContent] =>
     print("createGame")
     controller = new Controller()
