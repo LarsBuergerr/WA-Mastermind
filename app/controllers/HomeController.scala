@@ -24,8 +24,10 @@ import de.htwg.se.mastermind.model.FileIOComponent.fileIOjsonImpl.FileIO
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents)(implicit system: ActorSystem, mat: Materializer) extends BaseController {
 
+  var status = "continue"
+
   var code = new Code(4)
-  var game = Game(new Field(), code, 0)
+  var game = Game(new Field(10, 4, Stone("E"), HintStone("E")), code, 0)
   var controller = Controller(game, new FileIO)
   
   var controller_map: Map[String, Controller] = Map[String, Controller]()
@@ -89,6 +91,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     controller_map(hash).currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller_map(hash).game.field.matrix.cols)(Stone("E")))
     controller_map(hash).placeGuessAndHints(stoneVector, hints, controller_map(hash).game.getCurrentTurn())
     
+    if (hints.forall(p => p.stringRepresentation.equals("R"))) { // Win
+      status = "win"
+    } else if (controller_map(hash).game.getRemainingTurns().equals(0)) { // Lose
+      status = "lose"
+    }
+
     Ok("success")
   }
 
@@ -166,10 +174,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
 
   class MastermindSocketActor(out: ActorRef, hash:String) extends Actor {
     if (client_map.contains(hash)) {
-      var a = client_map(hash)
-      a += out
-      println(a.length)
-      client_map += (hash -> a)
+      if (client_map(hash).length < 2) {
+        var a = client_map(hash)
+        a += out
+        println(a.length)
+        client_map += (hash -> a)
+      }
     } else {
       client_map += (hash -> ListBuffer(out))
     }
@@ -179,12 +189,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
         for (client <- client_map(hash)) {
           println("refreshed")
           println(client_map(hash).length)
-          client ! controller_map(hash).gameToJson.toString()
+          client ! Json.obj("status" -> status, "game" -> controller_map(hash).gameToJson).toString()
         }
       }
       case msg: JsObject =>
         println("ws: " + msg + " for game: " + hash)
-        out ! controller_map(hash).gameToJson.toString()
+        out ! Json.obj("status" -> status, "game" -> controller_map(hash).gameToJson).toString()
     }
   }
 

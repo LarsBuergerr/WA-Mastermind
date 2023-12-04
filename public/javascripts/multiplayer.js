@@ -24,7 +24,7 @@ function webSocketInit() {
                 console.log("json reloaded");
                 console.log(JSON.parse(event.data));
                 
-                checkStatusAndUpdate(JSON.parse(event.data));
+                checkStatusAndUpdate(JSON.parse(event.data).game);
             }
         } else {
             console.log("no valid json data");
@@ -160,7 +160,7 @@ function checkStatusAndUpdate(data) {
     renderWinGameField(data.game)
     // Change the function of the "Place Stone" button to start a new game
     $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
-  } else if (data.turn == data.matrix.length) {  // ----- LOSE GAME -----
+  } else if (data.turn == data.matrix.length - 1) {  // ----- LOSE GAME -----
     $('.header-image').fadeOut('slow', function() {
       $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
     });
