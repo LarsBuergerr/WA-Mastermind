@@ -64,6 +64,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     Ok(views.html.createMultiplayer())
   }
 
+  def multiplayerWaiting(hash: String) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.multiplayerWaiting(hash))
+  }
+
   def multiplayer(hash: String, player: String) = Action { implicit request: Request[AnyContent] =>
     var multi_controller = new Controller()
     controller_map += (hash -> multi_controller)

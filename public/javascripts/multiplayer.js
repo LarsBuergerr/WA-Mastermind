@@ -1,12 +1,21 @@
 let socket;
 
 window.onload = async () => {
-    await webSocketInit();
+  await webSocketInit();
 
-    // check if player 2 when yes send start game to server
-    if(getCookie("pn") === "player2") {
-        gameChanges("/game_multiplayer/getGame/"+getCookie("game"));
+  // check if player 2 when yes send start game to server
+  if(getCookie("pn") === "player2") {
+    console.log("start game");
+    gameChanges("/game_multiplayer/getGame/"+getCookie("game"));
+  } else {
+    // route to waiting page
+    console.log("waiting for player 2");
+    let hash = getCookie("game");
+    console.log("Hash: ", hash);
+    if (window.location.pathname !== "/game_multiplayer/multiplayerWaiting/" + hash) {
+      window.location.href = "/game_multiplayer/multiplayerWaiting/" + hash;
     }
+  }
 }
 
 function webSocketInit() {
