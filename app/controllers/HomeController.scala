@@ -7,6 +7,8 @@ import play.api.mvc._
 import java.lang.ProcessBuilder.Redirect
 import de.htwg.se.mastermind.controller.ControllerComponent.ControllerBaseImpl._
 import de.htwg.se.mastermind.model.GameComponent.GameBaseImpl.{Stone, HStone, HintStone}
+import play.api.libs.json._
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -27,25 +29,28 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
+    print("createGame")
     controller = new Controller()
-    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+    Ok(controller.fileIO.gameToJson(controller.game))
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+    Ok(controller.fileIO.gameToJson(controller.game))
   }
 
-  def displayWinPage() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayWinPage(controller.gameToJson, controller.currentStoneVector, ""))
+  /*
+   * Implicit Writes for the Stone class
+   */
+  implicit val stoneWrites = new Writes[Stone] {
+    def writes(stone: Stone) = Json.obj(
+      "stone" -> stone.stringRepresentation
+    )
   }
 
-  def displayLosePage() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
-  }
-
-  def placeStone(stone: String, position: Int) = Action {implicit request: Request[AnyContent] =>
-    controller.currentStoneVector = controller.currentStoneVector.updated(position, Stone(stone))
-    Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))  
+  implicit val vectorStoneWrites = new Writes[Vector[Stone]] {
+    def writes(vectorStone: Vector[Stone]) = Json.obj(
+      "stones" -> vectorStone.map(_.stringRepresentation)
+    )
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
@@ -53,17 +58,18 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
 
+    // Enable to see the code
     print(controller.game.getCode())
     //reset currentStoneVector to only empty stones
     controller.currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller.game.field.matrix.cols)(Stone("E")))
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
 
-    if(hints.forall(p => p.stringRepresentation.equals("R"))) {
-      Ok(views.html.displayWinPage(controller.gameToJson, controller.currentStoneVector, ""))
-    } else if(controller.game.getRemainingTurns().equals(0)) {
-      Ok(views.html.displayLosePage(controller.gameToJson, controller.currentStoneVector, ""))
-    } else {
-      Ok(views.html.displayGame(controller.gameToJson, controller.currentStoneVector, ""))
+    if(hints.forall(p => p.stringRepresentation.equals("R"))) { // Win
+      Ok(Json.obj("status" -> "win", "game" -> controller.fileIO.gameToJson(controller.game)))
+    } else if(controller.game.getRemainingTurns().equals(0)) {  // Lose
+      Ok(Json.obj("status" -> "lose", "game" -> controller.fileIO.gameToJson(controller.game)))
+    } else {  // Continue
+      Ok(controller.fileIO.gameToJson(controller.game))
     }
   }
 
