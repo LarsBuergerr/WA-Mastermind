@@ -21,9 +21,23 @@ GET     /game/createGame            controllers.HomeController.createGame()
 
 GET     /game/displayGame           controllers.HomeController.displayGame()
 
-GET     /game/joinMultiplayer       controllers.HomeController.joinMultiplayer()
-
 GET     /game/placeStones/:stones   controllers.HomeController.placeStones(stones: String)
+
+GET     /game_multiplayer/joinMultiplayer       controllers.HomeController.joinMultiplayer()
+
+GET     /game_multiplayer/createMultiplayer     controllers.HomeController.createMultiplayer()
+
+GET     /game_multiplayer/:hash/:player   controllers.HomeController.multiplayer(hash: String, player: String)
+
+GET     /game_multiplayer/join/:hash/:player   controllers.HomeController.join(hash: String, player: String)
+
++nocsrf
+POST    /game_multiplayer/getGame/:hash     controllers.HomeController.getGameMultiplayer(hash: String)
+
++nocsrf
+POST    /game_multiplayer/placeStones/:hash/:stones  controllers.HomeController.placeStonesMultiplayer(hash: String, stones: String)
+
+GET     /ws/:hash                   controllers.HomeController.socket(hash: String)
 
 # ERROR routing
 GET     /errors/notfound            controllers.HomeController.notFound()
