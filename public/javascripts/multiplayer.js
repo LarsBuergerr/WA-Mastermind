@@ -280,11 +280,29 @@ function showWaitingForJoinDiv(gameToken) {
   var overlay = $('<div class="overlay"></div>');
   var hoverDiv = $('<div class="hover-div"><h1>Waiting for other player to join: </h1></div>');
 
+  // Create a spinner
+  var spinner = $('<div class="spinner"></div>');
+
   // Create a clickable box with the game token
-  var tokenBox = $('<div class="token-box" onclick="copyToClipboard(\'' + gameToken + '\')">Copy token to clipboard!</div>');
+  var tokenBox = $('<div class="token-box">' + gameToken + '</div>');
+
+  // Create a text element
+  var textElement = $('<h1>Your game hash is:</h1>');
+
+  // Change the color and text of the token box when clicked
+  tokenBox.click(function() {
+    var self = $(this);
+    self.css('background-color', 'green');
+    self.text('Copied to clipboard!');
+    copyToClipboard(gameToken);
+    setTimeout(function() {
+      self.css('background-color', ''); // Change this to the original color
+      self.text(gameToken); // Change the text back to the game token
+    }, 500);
+  });
 
   // Append the elements to the body
-  $('body').append(overlay.append(hoverDiv.append(tokenBox)));
+  $('body').append(overlay.append(hoverDiv.append(spinner, textElement, tokenBox)));
 }
 
 // Function to copy the game token to the clipboard
