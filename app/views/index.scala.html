@@ -13,44 +13,10 @@
   <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayGame.js")"></script>
   <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayWin.js")"></script>
   <script type=text/javascript src="@routes.Assets.versioned("javascripts/displayLoose.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/index.js")"></script>
 
   <!-- Body -->
-  <body>
-    <div class="banner">
-      <img src="@routes.Assets.versioned("images/online_banner.png")" class="banner_image">
-    </div>
-    <div class="stones">
-      <img src="@routes.Assets.versioned("images/stones/stone_win.png")" class="stone_win round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_B.png")" class="stone_B round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_G.png")" class="stone_G round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_R.png")" class="stone_R round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_Y.png")" class="stone_Y round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_W.png")" class="stone_W round_image">
-      <img src="@routes.Assets.versioned("images/stones/stone_P.png")" class="stone_P round_image">
-      <h2 class="front_text">Can you guess the code?</h2>
-    </div>
-    <img src="@routes.Assets.versioned("images/arrow.png")" class="arrow">
-    <script type=text/javascript src="@routes.Assets.versioned("javascripts/index.js")"></script>
-    
-    <div class="game">
-      <div class="header-container">
-        <div class="top-bar"> 
-          <img src="@routes.Assets.versioned("images/mastermind_header_cropped.png")" class="header-image">
-        </div>
-        <div class="center" style="text-align: center;">
-            <div class="game-container">
-                <!-- Game box (stones) -->
-                <div class="game-box">
-                  <!-- Will be rendered by javascript -->
-                </div>
-                <!-- Hintstone box -->
-                <div class="hintstone-box">
-                  <!-- Will be rendered by javascript -->
-                </div>
-            </div>    <!-- End of game-container -->
-            <button class="placeStonesButton">Place Stones</button>
-        </div>
-      </div>
-    </div>
-  </body>
+  <main class="index">
+    <game_board></game_board>
+  </main>  
 }
