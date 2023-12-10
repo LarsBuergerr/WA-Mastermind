@@ -65,10 +65,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     Ok(views.html.createMultiplayer())
   }
 
-  def multiplayerWaiting(hash: String) = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.multiplayerWaiting(hash))
-  }
-
   def multiplayer(hash: String, player: String) = Action { implicit request: Request[AnyContent] =>
     var multi_controller = new Controller()
     controller_map += (hash -> multi_controller)
@@ -160,13 +156,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     Ok(views.html.help())
   }
 
-  // Pricing Page
-  def pricing() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.pricing())}
-
-  def login() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.login())
-  }
 
   // Error Handling
   def notFound() = Action { implicit request: Request[AnyContent] => 
