@@ -27,8 +27,6 @@ GET     /game_multiplayer/joinMultiplayer       controllers.HomeController.joinM
 
 GET     /game_multiplayer/createMultiplayer     controllers.HomeController.createMultiplayer()
 
-GET     /game_multiplayer/multiplayerWaiting/:hash     controllers.HomeController.multiplayerWaiting(hash: String)
-
 GET     /game_multiplayer/:hash/:player   controllers.HomeController.multiplayer(hash: String, player: String)
 
 GET     /game_multiplayer/join/:hash/:player   controllers.HomeController.join(hash: String, player: String)
