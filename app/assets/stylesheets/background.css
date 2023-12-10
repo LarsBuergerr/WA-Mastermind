@@ -1,0 +1,54 @@
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #6a11cb;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgb(201, 16, 16),rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgb(218, 48, 48),rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+}
+
+
+@media only screen and (max-width: 768px) {
+    .card {
+        width: 100%;
+    }
+}
+
+.spinner {
+    margin: 100px auto;
+    width: 5em;
+    height: 5em;
+    border: 0.8em solid rgba(87, 87, 87, 0.2);
+    border-radius: 50%;
+    border-top-color: #3498db;
+    animation: spin 2s linear infinite, colorChange 5s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes colorChange {
+    0% {
+        border-top-color: red;
+    }
+      50% {
+        border-top-color: blue;
+      }
+      100% {
+        border-top-color: red;
+      }
+  }
+
+.token-box {
+  width: 200px; /* Adjust this value as needed */
+  text-align: center;
+  /* Add your other styles here */
+}

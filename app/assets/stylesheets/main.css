@@ -6,6 +6,7 @@ body {
 
 /* Apply settings so navbar is transparent */
 .navbar {
+  z-index: 9999;
   background-color: transparent !important;
   padding-top: 1rem;
   padding-left: 1rem;
@@ -13,12 +14,14 @@ body {
 
 /* Change navbar icon size */
 .navbar-icon {
+  z-index: 9999;
   width: 5rem;
   height: 5rem;
 }
 
 /* Padding for the navbar icon*/
 .navbar-toggler {
+  z-index: 9999;
   margin-left: auto; /* Automatically align the navbar icon to the right */
   padding-top: 1rem;
   padding-right: 1rem;
@@ -28,11 +31,13 @@ body {
 }
 
 .nav-link {
+  z-index: 9999;
   font-size: 2rem;
   color: aliceblue !important;
 }
 
 .nav-icon{
+  z-index: 9999;
   width: 3rem;
   height: 3rem;
   margin-left: 1rem;
@@ -41,31 +46,37 @@ body {
 }
 
 .nav-link:hover {
+  z-index: 9999;
   background: linear-gradient(to bottom, red, rgb(56, 56, 252)); /* Apply linear gradient to the text color */
   -webkit-background-clip: text; /* Set the background clip to text for webkit browsers */
   -webkit-text-fill-color: transparent; /* Set the text fill color to transparent for webkit browsers */
 }
 
 .offcanvas {
+  z-index: 9999;
   background-color: rgba(41, 41, 41, 0.8); /* black with 80% opacity */
 }
 
 .offcanvas-title {
+  z-index: 9999;
   font-size: 2rem;
 }
 
 .offcanvas-header{
+  z-index: 9999;
   color: aliceblue !important;
   margin-left: 1rem;
 }
 
 .offcanvas .btn-close{
+  z-index: 9999;
   color: aliceblue !important;
   font-size: 2rem;
 }
 
 
 .orientationMessage{
+  z-index: 9999;
   display: none;
   position: absolute;
   z-index: 9999;
@@ -86,6 +97,7 @@ body {
 }
 
 .orientationText {
+  z-index: 9999;
   font-size: 2rem;
   background: linear-gradient(to bottom, red, rgb(56, 56, 252));
   -webkit-background-clip: text;
@@ -93,6 +105,7 @@ body {
 }
 
 .orientation-icon{
+  z-index: 9999;
   width: 15rem;
   animation: wiggle 1s infinite;
 }
