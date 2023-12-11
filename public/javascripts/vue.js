@@ -79,7 +79,7 @@ app.component('nav_bar', {
   ` // End of template nav_bar
 })
 
-app.component('game_board', {
+app.component('index_page', {
   template: `
     <div class="banner">
       <img src="/assets/images/online_banner.png" class="banner_image">
@@ -95,7 +95,11 @@ app.component('game_board', {
       <h2 class="front_text">Can you guess the code?</h2>
     </div>
     <img src="/assets/images/arrow.png" class="arrow">
+  ` // End of template index_page
+})
 
+app.component('game_board', {
+  template: `
     <div class="game">
       <div class="header-container">
         <div class="top-bar"> 
