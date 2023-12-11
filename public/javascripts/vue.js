@@ -121,6 +121,7 @@ app.component('game_board', {
       </div>
     </div>
   `,
+
   data() {
     return {
       stoneArray: ["E", "E", "E", "E"],
@@ -471,31 +472,6 @@ app.component('join_multiplayer_form', {
         </div>
       </section>
     ` // End of template join_multiplayer_form
-})
-
-app.component('multiplayer_game_board', {
-  template: `
-    <div class="game" style="top: 0">
-    <div class="header-container">
-      <div class="top-bar"> 
-        <img src="/assets/images/mastermind_header_cropped.png" class="header-image">
-      </div>
-      <div class="center" style="text-align: center;">
-          <div class="game-container">
-              <!-- Game box (stones) -->
-              <div class="game-box">
-                <!-- Will be rendered by javascript -->
-              </div>
-              <!-- Hintstone box -->
-              <div class="hintstone-box">
-                <!-- Will be rendered by javascript -->
-              </div>
-          </div>    <!-- End of game-container -->
-          <button class="placeStonesButton">Place Stones</button>
-      </div>
-    </div>
-  </div>
-  ` // End of template multiplayer_game_board
 })
 
 app.component('game_about', {
