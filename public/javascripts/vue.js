@@ -129,6 +129,7 @@ app.component('game_board', {
   },
 
   methods: {
+
     stones_movement() {
       $(document).ready(function() {
         let text = document.querySelector(".front_text");
@@ -169,6 +170,7 @@ app.component('game_board', {
         });
       });
     },
+
     addEventListeners() {
       document.addEventListener("DOMContentLoaded", _ => {
         // Add event listeners after the DOM has fully loaded
@@ -190,55 +192,58 @@ app.component('game_board', {
         });
       });
     },
+
     createErrorPopup(message) {
       var errorPopup = document.createElement("div");
       errorPopup.className = "error-popup";
       errorPopup.innerHTML = message;
       document.body.appendChild(errorPopup);
-    
       setTimeout(function () {
-        errorPopup.style.opacity = 0;
-        setTimeout(function () {
-            errorPopup.remove();
-            }, 1000);
-        }, 3000); // 3000 milliseconds (3 seconds) until it disappears
+      errorPopup.style.opacity = 0;
+      setTimeout(function () {
+        errorPopup.remove();
+        }, 1000);
+      }, 3000); // 3000 milliseconds (3 seconds) until it disappears
     },
+
     startChangeStone(element, pos) {
       let _this = this;
       var possible_stones = ["R", "G", "B", "Y", "P", "W"];
       var current_stone = element.src.split("_")[1].split(".")[0];
     
-        function scrollHandler(event) {
-            event.preventDefault();
-            if (event.deltaY > 0) {
-                current_stone = possible_stones[(possible_stones.indexOf(current_stone) + 1) % possible_stones.length];
-            } else {
-                current_stone = possible_stones[(possible_stones.indexOf(current_stone) - 1 + possible_stones.length) % possible_stones.length];
-            }
-            element.src = "/assets/images/stones/stone_" + current_stone + ".png";
-            _this.stoneArray[pos] = current_stone;
-        }
-    
-        // Check if it's a touch device
-        if ('ontouchstart' in window) {
-            element.addEventListener('click', function() {
-                console.log("click triggered");
-                current_stone = possible_stones[(possible_stones.indexOf(current_stone) + 1) % possible_stones.length];
-                element.src = "/assets/images/stones/stone_" + current_stone + ".png";
-                _this.stoneArray[pos] = current_stone;
-            });
+      function scrollHandler(event) {
+        event.preventDefault();
+        if (event.deltaY > 0) {
+          current_stone = possible_stones[(possible_stones.indexOf(current_stone) + 1) % possible_stones.length];
         } else {
-            element.addEventListener('wheel', scrollHandler);
+          current_stone = possible_stones[(possible_stones.indexOf(current_stone) - 1 + possible_stones.length) % possible_stones.length];
         }
-        //element.addEventListener("wheel", scrollHandler);
-        //eventListeners[pos] = scrollHandler;
+        element.src = "/assets/images/stones/stone_" + current_stone + ".png";
+        _this.stoneArray[pos] = current_stone;
+      }
+    
+      // Check if it's a touch device
+      if ('ontouchstart' in window) {
+        element.addEventListener('click', function() {
+          console.log("click triggered");
+          current_stone = possible_stones[(possible_stones.indexOf(current_stone) + 1) % possible_stones.length];
+          element.src = "/assets/images/stones/stone_" + current_stone + ".png";
+          _this.stoneArray[pos] = current_stone;
+        });
+      } else {
+        element.addEventListener('wheel', scrollHandler);
+      }
+      //element.addEventListener("wheel", scrollHandler);
+      //eventListeners[pos] = scrollHandler;
     },
+
     stopChangeStone(element, pos) {
       let _this = this;
       if (_this.eventListeners[pos]) {
         element.removeEventListener("wheel", _this.eventListeners[pos]);
       }
     },
+
     placeStones() {
       let _this = this;
       if (_this.stoneArray.includes("E")) {
@@ -257,7 +262,7 @@ app.component('game_board', {
                 $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
               });
               console.log("You won!");
-              this.renderWinGameField(data.game)
+              this.renderEndGameField(data.game, '/assets/images/stones/stone_win.png', '/assets/images/hintstones/hstone_R.png');
               // Change the function of the "Place Stone" button to start a new game
               $('.placeStonesButton').off('click').on('click', this.startNewGame).text('Start New Game');
             } else if (data.status === "lose") {  // ----- LOSE GAME -----
@@ -265,11 +270,11 @@ app.component('game_board', {
                 $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
               });
               $('<link>')
-                  .appendTo('head')
-                  .attr({type : 'text/css', rel : 'stylesheet'})
-                    .attr('href', '/assets/stylesheets/displayLoosePage.css');  
+                .appendTo('head')
+                .attr({type : 'text/css', rel : 'stylesheet'})
+                .attr('href', '/assets/stylesheets/displayLoosePage.css');  
               console.log("You lost!");
-              this.renderLooseGameField(data.game)
+              this.renderEndGameField(data.game, '/assets/images/stones/stone_R.png', '/assets/images/hintstones/hstone_E.png');
               // Change the function of the "Place Stone" button to start a new game
               $('.placeStonesButton').off('click').on('click', this.startNewGame).text('Start New Game');
               //ameInProgress = false;
@@ -280,6 +285,7 @@ app.component('game_board', {
         });
       }
     },
+
     startNewGame() {
       $.ajax({
         url: '/game/createGame',
@@ -296,11 +302,10 @@ app.component('game_board', {
         }
       });
     },
-    updateGameField(data) {
 
+    updateGameField(data) {
       // Update the turn and matrix rows
       var currentTurn = data.turn;
-    
       // Update matrix rows
       var matrixRows = data.matrix.map(function (row) {
         return row.cells.map(function (cell) {
@@ -311,28 +316,23 @@ app.component('game_board', {
           }
         }).join('');
       });
-    
       // Update hint stone rows
       var hintstoneRows = data.hmatrix.map(function (row) {
-          return row.cells.map(function (cell) {
-              return '<img src="/assets/images/hintstones/hstone_' + cell.value + '.png" class="hintstone-cell">';
-          }).join('');
+        return row.cells.map(function (cell) {
+          return '<img src="/assets/images/hintstones/hstone_' + cell.value + '.png" class="hintstone-cell">';
+        }).join('');
       });
-    
         // Update the game box HTML
         $('.game-box').html('');
         $('.game-box').append('<h3 id="demo" style="font-family: monospace; font-size: 22px; display: inline-block;">');
-    
         for (var i = 0; i < matrixRows.length; i++) {
-            if (i === currentTurn) {
-                $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
-            } else {
-                $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
-            }
+          if (i === currentTurn) {
+            $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
+          } else {
+            $('.game-box h3').append('<div class="game-row">' + matrixRows[i] + '</div>');
+          }
         }
-    
         $('.game-box').append('</h3>');
-    
         // Update the hintstone box HTML
         $('.hintstone-box').html('');
         $('.hintstone-box').append('<h3 style="font-family: monospace; font-size: 22px; display: inline-block;">');
@@ -356,64 +356,33 @@ app.component('game_board', {
             });
         });
     },
-    renderLooseGameField(gameData) {
+
+    renderEndGameField(gameData, stones_img, hintstones_img) {
       // Clear the current game field
       $('.game-box').empty();
       $('.hintstone-box').empty();
-    
       // Create the specified number of rows
       gameData.matrix.forEach(function(row, index) {
         var $row = $('<div>').addClass('game-row');
         var $hintstoneRow = $('<div>').addClass('hintstone-row');
-    
         // Create the specified number of cells in each row
         row.cells.forEach(function() {
           var $cell = $('<img>').addClass('stone-cell-locked');
-          $cell.attr('src', '/assets/images/stones/stone_R.png');
+          $cell.attr('src', stones_img);
           $row.append($cell);
         });
-    
         // Create the specified number of hintstones in each row
         gameData.hmatrix[index].cells.forEach(function() {
           var $hintstone = $('<img>').addClass('hintstone-cell');
-          $hintstone.attr('src', '/assets/images/hintstones/hstone_E.png');
+          $hintstone.attr('src', hintstones_img);
           $hintstoneRow.append($hintstone);
         });
-    
         // Add the row to the game box
         $('.game-box').append($row);
         $('.hintstone-box').append($hintstoneRow);
       });
     },
-    renderWinGameField(gameData) {
-      // Clear the current game field
-      $('.game-box').empty();
-      $('.hintstone-box').empty();
-    
-      // Create the specified number of rows
-      gameData.matrix.forEach(function(row, index) {
-        var $row = $('<div>').addClass('game-row');
-        var $hintstoneRow = $('<div>').addClass('hintstone-row');
-    
-        // Create the specified number of cells in each row
-        row.cells.forEach(function() {
-          var $cell = $('<img>').addClass('stone-cell-locked');
-          $cell.attr('src', '/assets/images/stones/stone_win.png');
-          $row.append($cell);
-        });
-    
-        // Create the specified number of hintstones in each row
-        gameData.hmatrix[index].cells.forEach(function() {
-          var $hintstone = $('<img>').addClass('hintstone-cell');
-          $hintstone.attr('src', '/assets/images/hintstones/hstone_R.png');
-          $hintstoneRow.append($hintstone);
-        });
-    
-        // Add the row to the game box
-        $('.game-box').append($row);
-        $('.hintstone-box').append($hintstoneRow);
-      });
-    },
+
     displayGame() {
       $.ajax({
         url: '/game/displayGame',
