@@ -275,6 +275,8 @@ function updateGameField(data) {
     });
 }
 
+/* ---------------------------------------------------------------------------- */
+
 function showWaitingForJoinDiv(gameToken) {
   // Create the overlay and hover-div elements
   var overlay = $('<div class="overlay"></div>');

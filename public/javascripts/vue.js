@@ -126,12 +126,14 @@ app.component('game_board', {
     return {
       stoneArray: ["E", "E", "E", "E"],
       eventListeners: [],
+      socket : undefined
     }
   },
 
   methods: {
 
     stones_movement() {
+      // if game_multiplayer is part of path do nothing
       $(document).ready(function() {
         let text = document.querySelector(".front_text");
         let arrow = document.querySelector(".arrow");
@@ -172,7 +174,8 @@ app.component('game_board', {
       });
     },
 
-    addEventListeners() {
+    addEventListeners(isMultiplayer) {
+      let _this = this;
       document.addEventListener("DOMContentLoaded", _ => {
         // Add event listeners after the DOM has fully loaded
         var stoneCells = document.querySelectorAll(".stone-cell");
@@ -189,7 +192,11 @@ app.component('game_board', {
         // Place stones button click event
         var placeStonesButton = document.querySelector(".placeStonesButton");
         placeStonesButton.addEventListener("click", _ => {
-          this.placeStones();
+          if(isMultiplayer) {
+            this.gameChanges("/game_multiplayer/placeStones/"+this.getCookie("game")+"/"+_this.stoneArray.join(""));
+          } else {
+            this.placeStones();
+          }
         });
       });
     },
@@ -392,20 +399,183 @@ app.component('game_board', {
           this.updateGameField(data);
         } 
       });
+    },
+  /* ------------------------- Multiplayer ------------------------- */
+
+    webSocketInit() {
+      let _this = this;
+      _this.socket = new WebSocket("ws://127.0.0.1:9000/ws/"+ this.getCookie("game"));
+      console.log("socket created")
+      
+      console.log("game loaded")
+      _this.socket.onopen = () => this.heartBeat();
+      _this.socket.onclose = () => console.log("Connection closed")
+      _this.socket.onmessage = event => {
+          if(event.data !== "") {
+              if(event.data === "Keep alive"){
+                  console.log("ping")
+              }else{
+                  data = JSON.parse(event.data)
+
+                  this.checkStatusAndUpdate(data.game);
+                  console.log(data.current_turn);
+                  if(data.current_turn !== this.getCookie("pn")) {
+                    console.log("your turn")
+                    this.showWaitingForTurnDiv();
+                  } else {
+                    this.removeWaitingForTurnDiv();
+                  }
+              }
+          } else {
+              console.log("no valid json data");
+              _this.socket.send("refresh");
+          }
+      }
+      _this.socket.onerror = () => console.log("that was a problem")
+
+      setInterval(() => _this.socket.send("Keep alive"), 20000); // ping every 20 seconds
+    },
+
+    heartBeat() {
+      let _this = this;
+      _this.socket.send("heartBeat");
+    },
+
+    async gameChanges(url) {
+      let _this = this;
+      const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json */*',
+              'Content-Type': 'application/json'},
+          body: ""
+      })
+      if (await res.ok) {
+          console.log("page loaded");
+          _this.socket.send("refresh");
+      } else {
+          console.log("page failed loading");
+      }
+    },
+    
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+
+    async initMultiplayer() {
+      console.log("fjdksafhdsaljfhsdal");
+      // check if path is multiplayer if yes then init multiplayer
+      console.log(window.location.pathname);
+      await this.webSocketInit();
+      // check if player 2 when yes send start game to server
+      if(this.getCookie("pn") === "player2") {
+        console.log("start game");
+        this.gameChanges("/game_multiplayer/getGame/"+this.getCookie("game"));
+      } else {
+        // route to waiting page
+        console.log("waiting for player 2");
+        this.showWaitingForJoinDiv(this.getCookie("game"));
+      }
+    },
+
+    showWaitingForJoinDiv(gameToken) {
+      // Create the overlay and hover-div elements
+      var overlay = $('<div class="overlay"></div>');
+      var hoverDiv = $('<div class="hover-div"><h1>Waiting for other player to join: </h1></div>');
+      // Create a spinner
+      var spinner = $('<div class="spinner"></div>');
+      // Create a clickable box with the game token
+      var tokenBox = $('<div class="token-box">' + gameToken + '</div>');
+      // Create a text element
+      var textElement = $('<h1>Your game hash is:</h1>');
+      // Change the color and text of the token box when clicked
+      tokenBox.click( _ => {
+        var self = $(this);
+        self.css('background-color', 'green');
+        self.text('Copied to clipboard!');
+        this.copyToClipboard(gameToken);
+        setTimeout( function() {
+          self.css('background-color', ''); // Change this to the original color
+          self.text(gameToken); // Change the text back to the game token
+        }, 500);
+      });
+      // Append the elements to the body
+      $('body').append(overlay.append(hoverDiv.append(spinner, textElement, tokenBox)));
+    },
+    
+    // Function to copy the game token to the clipboard
+    copyToClipboard(text) {
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    },
+    
+    showWaitingForTurnDiv() {
+      $('body').append('<div class="overlay"><div class="hover-div"><h1>Waiting for other player</h1></div></div>');
+    },
+      
+    removeWaitingForTurnDiv() {
+      $('.overlay').remove();
+    },
+    
+    checkStatusAndUpdate(data) {
+      console.log("check status and update");
+      // check if every hintstone is red in the last row
+      if (data.status === "win") {  // ----- WIN GAME -----
+        $('.header-image').fadeOut('slow', _ =>{
+          $(this).attr('src', '/assets/images/won.png').fadeIn('slow');
+        });
+        console.log("You won!");
+        this.renderWinGameField(data.game)
+        // Change the function of the "Place Stone" button to start a new game
+        $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
+      } else if (data.status === "lose") {  // ----- LOSE GAME -----
+        $('.header-image').fadeOut('slow', _ => {
+          $(this).attr('src', '/assets/images/loose.png').fadeIn('slow');
+        });
+        $('<link>')
+          .appendTo('head')
+          .attr({type : 'text/css', rel : 'stylesheet'})
+          .attr('href', '/assets/stylesheets/displayLoosePage.css');  
+        console.log("You lost!");
+        this.renderLooseGameField(data.game)
+        // Change the function of the "Place Stone" button to start a new game
+        $('.placeStonesButton').off('click').on('click', startNewGame).text('Start New Game');
+        //ameInProgress = false;
+      } else {  // ----- GAME CONTINUES -----
+        this.updateGameField(data);
+      }
+    },
+  },
+  
+  
+  created() {
+    console.log(window.location.pathname);
+    if (window.location.pathname.includes("game_multiplayer")) {
+      console.log("init multiplayer");
+      this.initMultiplayer();
+    } else {
+      console.log("display game");
+      this.displayGame();
     }
   },
 
-  created() {
-    this.displayGame()
-  },
-
   mounted() {
-    this.stones_movement()
-    this.addEventListeners()
-  }
+    if (!window.location.pathname.includes("game_multiplayer")) {
+      this.stones_movement();
+      this.addEventListeners(false);
+    } else {
+      this.addEventListeners(true);
+    }
+  },
 })
 
-app.component('create_multiplayer_form', {
+app.component('multiplayer_create', {
   template: `
     <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
@@ -413,12 +583,9 @@ app.component('create_multiplayer_form', {
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
           <div class="card bg-dark text-white" style="border-radius: 1rem;">
             <div class="card-body p-4 text-center"> <!-- Adjusted padding to p-4 -->
-
               <div class="mb-md-5 mt-md-4 pb-4"> <!-- Adjusted padding to pb-4 -->
-
                 <h2 class="fw-bold mb-2 text-uppercase">New Multiplayer Game</h2>
                 <p class="text-white-50 mb-4">Please enter your Players Name!</p>
-
                 <div class="form-outline form-white mb-3">
                   <div class="input-field">
                     <input type="text" id="player" required />
@@ -432,10 +599,53 @@ app.component('create_multiplayer_form', {
       </div>
     </div>
   </section>
-  ` // End of template create_multiplayer_form
+  `, // End of template create_multiplayer_form
+
+  methods: {
+    
+    multiplayer_create_init() {
+      $("document").ready( _ => {
+        $("#create_multiplayer").click( _ => {
+          this.setCookies("", "player1");
+          window.location.href = "/game_multiplayer/" + this.getCookie("game")+"/"+ this.getCookie("name");
+        })
+      })
+    },
+  
+    createHash(){
+      let result           = '';
+      let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let charactersLength = characters.length;
+      for ( let i = 0; i < 5; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    },
+  
+    setCookies(hash, player) {
+      if(hash === "") {
+        document.cookie = "game=" + this.createHash();
+      } else {
+        document.cookie = "game=" + hash;
+      }
+      document.cookie = "pn=" + player;
+      document.cookie = "name="+document.getElementById("player").value;
+    },
+  
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+
+  },
+
+  created() {
+    this.multiplayer_create_init()
+  }
 })
 
-app.component('join_multiplayer_form', {
+app.component('multiplayer_join', {
   template: `
     <section class="vh-100 gradient-custom">
         <div class="container py-5 h-100">
@@ -443,27 +653,21 @@ app.component('join_multiplayer_form', {
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
               <div class="card bg-dark text-white" style="border-radius: 1rem;">
                 <div class="card-body p-4 text-center"> <!-- Adjusted padding to p-4 -->
-
                   <div class="mb-md-5 mt-md-4 pb-4"> <!-- Adjusted padding to pb-4 -->
-
                     <h2 class="fw-bold mb-2 text-uppercase">Enter Multiplayer Game</h2>
                     <p class="text-white-50 mb-4">Please enter your Players Name!</p>
-
                     <div class="form-outline form-white mb-3">
                       <div class="input-field">
                         <input type="text" id="player" required />
                       </div>
                     </div>
-
                     <p class="text-white-50 mb-4">Please enter the Game Hash!</p>
                     <div class="form-outline form-white mb-3">
                       <div class="input-field">
                         <input type="text" id="game_hash" required />
                       </div>
                     </div>
-
                     <button class="btn btn-outline-light btn-lg px-5" type="submit" id="join_multiplayer">Join Game</button>
-
                   </div>  <!-- End of mb-md-5 mt-md-4 pb-4 -->
                 </div>
               </div>
@@ -471,7 +675,50 @@ app.component('join_multiplayer_form', {
           </div>
         </div>
       </section>
-    ` // End of template join_multiplayer_form
+    `, // End of template join_multiplayer_form
+    
+    methods: {
+    
+      multiplayer_join_init() {
+        $("document").ready( _ => {
+          $("#join_multiplayer").click( _ => {
+            // TODO check that the game exists in the controller map
+            this.setCookies(document.getElementById("game_hash").value, "player2");
+            window.location.href = "/game_multiplayer/join/" + this.getCookie("game") + "/" + this.getCookie("name");
+          })
+        })
+      },
+    
+      createHash() {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < 5; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      },
+    
+      setCookies(hash, player) {
+        if (hash === "") {
+          document.cookie = "game=" + this.createHash();
+        } else {
+          document.cookie = "game=" + hash;
+        }
+        document.cookie = "pn=" + player;
+        document.cookie = "name=" + document.getElementById("player").value;
+      },
+    
+      getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      },
+    },
+
+    created() {
+      this.multiplayer_join_init()
+    }
 })
 
 app.component('game_about', {
