@@ -42,12 +42,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
   }
 
   def index() = Action { implicit request: Request[AnyContent] =>
+    print("created singleplayer with code: ")
+    println(controller.game.getCode())
     Ok(views.html.index(controller.gameToJson, controller.currentStoneVector, ""))
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
-    print("createGame")
+    print("created new game with code: ")
     controller = new Controller()
+    println(controller.game.getCode())
     Ok(controller.fileIO.gameToJson(controller.game))
   }
 
@@ -69,6 +72,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     var multi_controller = new Controller()
     controller_map += (hash -> multi_controller)
     hash_map += (hash -> player)
+    print("created multiplayer with code: ")
+    println(controller_map(hash).game.getCode())
     Ok(views.html.multiplayer())
   }
 
@@ -93,9 +98,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     val stoneVector = controller_map(hash).game.buildVector(Vector[Stone](), chars)
     val hints = controller_map(hash).game.getCode().compareTo(stoneVector)
 
-    // Enable to see the code
-    print(controller_map(hash).game.getCode())
-    //reset currentStoneVector to only empty stones
     controller_map(hash).currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller_map(hash).game.field.matrix.cols)(Stone("E")))
     controller_map(hash).placeGuessAndHints(stoneVector, hints, controller_map(hash).game.getCurrentTurn())
     
@@ -131,9 +133,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
 
-    // Enable to see the code
-    print(controller.game.getCode())
-    //reset currentStoneVector to only empty stones
     controller.currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller.game.field.matrix.cols)(Stone("E")))
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
 

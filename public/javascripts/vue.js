@@ -492,13 +492,12 @@ app.component('game_board', {
       var textElement = $('<h1>Your game hash is:</h1>');
       // Change the color and text of the token box when clicked
       tokenBox.click( _ => {
-        var self = $(this);
-        self.css('background-color', 'green');
-        self.text('Copied to clipboard!');
+        tokenBox.css('background-color', 'green');
+        tokenBox.text('Copied to clipboard!');
         this.copyToClipboard(gameToken);
         setTimeout( function() {
-          self.css('background-color', ''); // Change this to the original color
-          self.text(gameToken); // Change the text back to the game token
+          tokenBox.css('background-color', ''); // Change this to the original color
+          tokenBox.text(gameToken); // Change the text back to the game token
         }, 500);
       });
       // Append the elements to the body
@@ -552,7 +551,6 @@ app.component('game_board', {
       }
     },
   },
-  
   
   created() {
     console.log(window.location.pathname);
