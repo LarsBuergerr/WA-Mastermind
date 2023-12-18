@@ -51,11 +51,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     print("created new game with code: ")
     controller = new Controller()
     println(controller.game.getCode())
-    Ok(controller.fileIO.gameToJson(controller.game))
+    Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
-    Ok(controller.fileIO.gameToJson(controller.game))
+    Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
   }
 
   /* ------------------- Multiplayer ------------------- */
@@ -74,7 +74,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     hash_map += (hash -> player)
     print("created multiplayer with code: ")
     println(controller_map(hash).game.getCode())
-    Ok(views.html.multiplayer())
+    Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
   }
 
   def join(hash: String, player: String) = Action { implicit request: Request[AnyContent] =>
@@ -129,6 +129,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
+    print("PLACE STONESSSSSSSSS")
     val chars = stones.toCharArray()
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
@@ -141,7 +142,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     } else if(controller.game.getRemainingTurns().equals(0)) {  // Lose
       Ok(Json.obj("status" -> "lose", "game" -> controller.fileIO.gameToJson(controller.game)))
     } else {  // Continue
-      Ok(controller.fileIO.gameToJson(controller.game))
+      Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
     }
   }
 
