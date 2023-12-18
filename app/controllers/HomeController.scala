@@ -48,13 +48,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
   }
 
   def createGame() = Action { implicit request: Request[AnyContent] =>
-    print("created new game with code: ")
+    println("[INFO]  User requested new game")
     controller = new Controller()
-    println(controller.game.getCode())
+    println("[INFO]  Current game code:  " + controller.game.getCode())
     Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
   }
 
   def displayGame() = Action { implicit request: Request[AnyContent] =>
+    println("[INFO]  User requested displayGame()")
+    println("[INFO]  Current game code:  " + controller.game.getCode())
     Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
   }
 
@@ -129,10 +131,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
   }
 
   def placeStones(stones: String) = Action { implicit request: Request[AnyContent] =>
-    print("PLACE STONESSSSSSSSS")
+
     val chars = stones.toCharArray()
     val stoneVector = controller.game.buildVector(Vector[Stone](), chars)
     val hints = controller.game.getCode().compareTo(stoneVector)
+
+    println("[INFO]  User placed stones: " + stoneVector.map(_.stringRepresentation).mkString(" | "))
 
     controller.currentStoneVector = Vector.from[Stone](Array.fill[Stone](controller.game.field.matrix.cols)(Stone("E")))
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
@@ -145,17 +149,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
       Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
     }
   }
-
-  // About Page
-  def about() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.about())
-  }
-
-  // Help Page
-  def help() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.help())
-  }
-
 
   // Error Handling
   def notFound() = Action { implicit request: Request[AnyContent] => 
