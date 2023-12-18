@@ -492,13 +492,12 @@ app.component('game_board', {
       var textElement = $('<h1>Your game hash is:</h1>');
       // Change the color and text of the token box when clicked
       tokenBox.click( _ => {
-        var self = $(this);
-        self.css('background-color', 'green');
-        self.text('Copied to clipboard!');
+        tokenBox.css('background-color', 'green');
+        tokenBox.text('Copied to clipboard!');
         this.copyToClipboard(gameToken);
         setTimeout( function() {
-          self.css('background-color', ''); // Change this to the original color
-          self.text(gameToken); // Change the text back to the game token
+          tokenBox.css('background-color', ''); // Change this to the original color
+          tokenBox.text(gameToken); // Change the text back to the game token
         }, 500);
       });
       // Append the elements to the body
@@ -553,7 +552,6 @@ app.component('game_board', {
     },
   },
   
-  
   created() {
     console.log(window.location.pathname);
     if (window.location.pathname.includes("game_multiplayer")) {
@@ -574,6 +572,39 @@ app.component('game_board', {
     }
   },
 })
+
+const multiplayerMixin = {
+
+  methods: {
+
+    createHash() {
+      let result = '';
+      let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let charactersLength = characters.length;
+      for (let i = 0; i < 5; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    },
+
+    setCookies(hash, player) {
+      if(hash === "") {
+        document.cookie = "game=" + this.createHash();
+      } else {
+        document.cookie = "game=" + hash;
+      }
+      document.cookie = "pn=" + player;
+      document.cookie = "name="+document.getElementById("player").value;
+    },
+
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+
+  }
+}
 
 app.component('multiplayer_create', {
   template: `
@@ -601,6 +632,8 @@ app.component('multiplayer_create', {
   </section>
   `, // End of template create_multiplayer_form
 
+  mixins: [multiplayerMixin],
+
   methods: {
     
     multiplayer_create_init() {
@@ -611,33 +644,6 @@ app.component('multiplayer_create', {
         })
       })
     },
-  
-    createHash(){
-      let result           = '';
-      let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let charactersLength = characters.length;
-      for ( let i = 0; i < 5; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      }
-      return result;
-    },
-  
-    setCookies(hash, player) {
-      if(hash === "") {
-        document.cookie = "game=" + this.createHash();
-      } else {
-        document.cookie = "game=" + hash;
-      }
-      document.cookie = "pn=" + player;
-      document.cookie = "name="+document.getElementById("player").value;
-    },
-  
-    getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    },
-
   },
 
   created() {
@@ -676,6 +682,8 @@ app.component('multiplayer_join', {
         </div>
       </section>
     `, // End of template join_multiplayer_form
+
+    mixins: [multiplayerMixin],
     
     methods: {
     
@@ -689,31 +697,6 @@ app.component('multiplayer_join', {
         })
       },
     
-      createHash() {
-        let result = '';
-        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let charactersLength = characters.length;
-        for (let i = 0; i < 5; i++) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-      },
-    
-      setCookies(hash, player) {
-        if (hash === "") {
-          document.cookie = "game=" + this.createHash();
-        } else {
-          document.cookie = "game=" + hash;
-        }
-        document.cookie = "pn=" + player;
-        document.cookie = "name=" + document.getElementById("player").value;
-      },
-    
-      getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-      },
     },
 
     created() {
