@@ -142,8 +142,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents)(i
     controller.placeGuessAndHints(stoneVector, hints, controller.game.getCurrentTurn())
 
     if(hints.forall(p => p.stringRepresentation.equals("R"))) { // Win
+      println("[INFO]  User won the game")
       Ok(Json.obj("status" -> "win", "game" -> controller.fileIO.gameToJson(controller.game)))
     } else if(controller.game.getRemainingTurns().equals(0)) {  // Lose
+      println("[INFO]  User lost the game")
       Ok(Json.obj("status" -> "lose", "game" -> controller.fileIO.gameToJson(controller.game)))
     } else {  // Continue
       Ok(Json.obj("status" -> "continue", "game" -> controller.fileIO.gameToJson(controller.game)))
