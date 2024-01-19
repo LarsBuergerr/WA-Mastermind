@@ -1,14 +1,17 @@
-ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "1.0"
-scalacOptions += "-Ytasty-reader"
-exportJars := true
+import dependencies._
 
-lazy val root = (project in file("."))
-    .enablePlugins(PlayScala, SbtWeb)
+name := """mastermindWeb"""
+
+lazy val root = project
+    .in(file("."))
     .settings(
-        name:= """WA-Mastermind""",
+        scalaVersion := scala2Version,
+        scalacOptions += "-Ytasty-reader",
+        name := "mastermindWeb",
         libraryDependencies ++= Seq(
             guice,
-            "org.scalatestplus.play" %% "scalatestplus-play" % "6.0.0-RC2" % Test,
-                    )
+            ws
+            ),
+        libraryDependencies ++= commonDependency,
     )
+    .enablePlugins(PlayScala, SbtWeb)
